@@ -6,7 +6,7 @@ const options = { discriminatorKey: 'kind' };
 
 const Sitter = Profile.discriminator(
   'Sitter',
-  new mongoose.schema({
+  new mongoose.Schema({
     stripeConnectId: {
       type: String,
       required: true,

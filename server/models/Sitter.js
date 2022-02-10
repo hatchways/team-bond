@@ -33,4 +33,4 @@ const Sitter = Profile.discriminator(
 
 const dollarToCents = (rate) => rate * 100;
 
-module.exports = Profile = mongoose.model('Sitter', profileSchema);
+module.exports = Sitter = mongoose.model('Sitter', profileSchema);

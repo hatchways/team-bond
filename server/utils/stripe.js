@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECERT);
 const Booking = require('../models/booking');
+const Sitter = require('../models/Sitter');
 
 const booking = Booking.findById(req.params.id);
 exports.createStripeCustomer = async () => {
@@ -18,7 +19,7 @@ exports.chargeCustomer = async (id) => {
   const endDate = new Date(booking.end);
   const diff = Math.abs(startDate - endDate);
   const hours = diff / 36e5;
-  const amount = hours * sitter.rate;
+  const amount = (hours * sitter.rate).toFixed(2);
   stripe.charges.create({
     amount: amount + 5,
     currency: 'usd',

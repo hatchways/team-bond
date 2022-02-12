@@ -20,9 +20,10 @@ exports.chargeCustomer = async (id) => {
   const diff = Math.abs(startDate - endDate);
   const hours = diff / 36e5;
   const amount = (hours * sitter.rate).toFixed(2);
+  const processingFee = 5;
   const CURRENCY = 'usd';
   stripe.charges.create({
-    amount: amount + 5,
+    amount: amount + procceingFee,
     currency: CURRENCY,
     customer: id,
   });

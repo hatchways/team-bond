@@ -11,7 +11,7 @@ const {
 
 router.route('/edit').put(protect, editProfile);
 router.route('/load').get(protect, loadProfile);
-router.route('/uploadPicture').post(uploadPicture);
+router.route('/uploadPicture').post(protect, uploadPicture);
 router.route('/deletePicture').delete(protect, deletePicture);
 router.route('/updatePicture').put(protect, updatePicture);
 

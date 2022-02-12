@@ -1,32 +1,47 @@
-const Profile = require('../models/Profile');
 const asyncHandler = require('express-async-handler');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('../utils/cloudinary');
-const upload = require('../utils/multer');
+const multer = require('multer');
+const Profile = require('../models/Profile');
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'images',
+    public_id: (req, file) => {
+      file.originalname + file.size;
+    },
+  },
+});
+const upload = multer({ storage: storage }).single('File');
 
 // @route POST /profile//uploadPicture
 // @desc upload user profile picutre
-exports.uploadPicture = asyncHandler(upload.single('image'), async (req, res, next) => {
-  const result = await cloudinary.uploader.upload(req.file.path);
+exports.uploadPicture = asyncHandler(async (req, res, next) => {
   const profile = await Profile.findById({ porfileId: req.profile.id });
-  if (profile) {
+  if (!profile) {
+    res.status(404);
+    throw new Error('No profile found');
+  }
+  upload(async (req, res, err) => {
+    if (err) {
+      res.status(400).send('Something went wrong!');
+    }
     const updatedProfile = await profile.updateOne({
       $set: {
-        photo: result.secure_url,
-        cloudinary_id: result.public_id,
+        photo: req.file.path,
+        cloudinary_id: req.file.filename,
       },
     });
     res.status(200);
     res.json({ message: 'Picture uploaded', updatedProfile });
-  } else {
-    res.status(404);
-    throw new Error('No profile found');
-  }
+  });
 });
 
-// @route POST /profile//deletePicture
+// @route DELETE /profile//deletePicture
 // @desc delete user profile picutre
 exports.deletePicture = asyncHandler(async (req, res, next) => {
-  let profile = await Profile.findById({ porfileId: req.profile.id });
+  const profile = await Profile.findById({ porfileId: req.profile.id });
   if (profile) {
     await cloudinary.uploader.destroy(profile.cloudinary_id);
     const updatedProfile = await profile.updateOne({
@@ -41,26 +56,29 @@ exports.deletePicture = asyncHandler(async (req, res, next) => {
     throw new Error('No profile found');
   }
 });
-
-exports.updatePicture = asyncHandler(upload.single('image'), async (req, res, next) => {
-  let profile = await Profile.findById({ porfileId: req.profile.id });
-  if (profile) {
-    await cloudinary.uploader.destroy(profile.cloudinary_id);
-    const result = await cloudinary.uploader.upload(req.file.path);
-    const updatedProfile = await profile.updateOne({
-      $set: {
-        photo: result.secure_url,
-        cloudinary_id: result.public_id,
-      },
-    });
-
-    res.json(updatedProfile);
-  } else {
+//@route PUT /profile//updatePicture
+// @desc update user profile picutre
+exports.updatePicture = asyncHandler(async (req, res, next) => {
+  const profile = await Profile.findById({ porfileId: req.profile.id });
+  if (!profile) {
     res.status(404);
     throw new Error('No profile found');
   }
+  await cloudinary.uploader.destroy(profile.cloudinary_id);
+  upload(async (req, res, err) => {
+    if (err) {
+      res.status(400).send('Something went wrong!');
+    }
+    const updatedProfile = await profile.updateOne({
+      $set: {
+        photo: req.file.path,
+        cloudinary_id: req.file.filename,
+      },
+    });
+    res.status(200);
+    res.json({ message: 'Picture updated', updatedProfile });
+  });
 });
-
 // @route PUT /profile/edit
 // @desc edit user profile
 // @access Public

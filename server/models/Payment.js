@@ -26,6 +26,10 @@ const Payment = new mongoose({
     required: true,
     set: payTotalOf,
   },
+  customerId: {
+    type: String,
+    required: true,
+  },
 });
 
 const getRate = async (sitterId) => {

@@ -20,7 +20,8 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
       }
     });
   }
-  const booking = await Booking.create(req.body);
+  const bookingInfo = { ...req.body, userId: req.params.id };
+  const booking = await Booking.create(bookingInfo);
   if (!booking) {
     res.status(500);
     throw new Error('Invalid booking data');

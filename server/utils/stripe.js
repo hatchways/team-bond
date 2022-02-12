@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECERT);
-const Booking = require('../models/booking');
+const Booking = require('../models/Booking');
 const Sitter = require('../models/Sitter');
 
 const booking = Booking.findById(req.params.id);

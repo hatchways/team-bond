@@ -28,7 +28,8 @@ const Sitter = Profile.discriminator(
       type: Number,
       get: dollarToCents,
     },
-  })
+  }),
+  options
 );
 
 const dollarToCents = (rate) => rate * 100;

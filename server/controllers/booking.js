@@ -20,7 +20,6 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
       }
     });
   }
-  Booking;
   const booking = await Booking.create(req.body);
   if (!booking) {
     res.status(500);

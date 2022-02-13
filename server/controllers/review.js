@@ -5,8 +5,8 @@ exports.createReview = asyncHandler(async (req, res, next) => {
   const review = await Review.create({
     userId: req.params.id,
     sitterId: req.body.sitterId,
-    review: req.body.review,
-    description: req.body.description,
+    rating: req.body.rating,
+    review: req.body.description,
   });
   if (!review) {
     res.status(500);

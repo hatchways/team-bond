@@ -11,11 +11,11 @@ const reviewSchema = new mongoose({
     required: true,
     ref: 'Sitter',
   },
-  review: {
+  rating: {
     type: Number,
     required: true,
   },
-  description: {
+  review: {
     type: String,
     required: false,
   },

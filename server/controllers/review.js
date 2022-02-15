@@ -23,8 +23,5 @@ exports.getallreviewsforSitter = asyncHandler(async (req, res, next) => {
   const reviews = Review.find({
     sitterId: req.body.sitterId,
   });
-  if (!reviews.length) {
-    res.json({ message: 'No reviews found be the first to write one!!' });
-  }
   res.send(reviews);
 });

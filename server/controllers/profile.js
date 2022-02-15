@@ -30,7 +30,7 @@ exports.uploadPicture = asyncHandler(async (req, res, next) => {
     const updatedProfile = await profile.updateOne({
       $set: {
         photo: req.file.path,
-        cloudinary_id: req.file.filename,
+        cloudinaryId: req.file.filename,
       },
     });
     res.status(200);
@@ -43,11 +43,11 @@ exports.uploadPicture = asyncHandler(async (req, res, next) => {
 exports.deletePicture = asyncHandler(async (req, res, next) => {
   const profile = await Profile.findById({ porfileId: req.profile.id });
   if (profile) {
-    await cloudinary.uploader.destroy(profile.cloudinary_id);
+    await cloudinary.uploader.destroy(profile.cloudinaryId);
     const updatedProfile = await profile.updateOne({
       $set: {
         photo: '',
-        cloudinary_id: '',
+        cloudinaryId: '',
       },
     });
     res.json(updatedProfile);
@@ -64,7 +64,7 @@ exports.updatePicture = asyncHandler(async (req, res, next) => {
     res.status(404);
     throw new Error('No profile found');
   }
-  await cloudinary.uploader.destroy(profile.cloudinary_id);
+  await cloudinary.uploader.destroy(profile.cloudinaryId);
   upload(async (req, res, err) => {
     if (err) {
       res.status(400).send('Something went wrong!');
@@ -72,7 +72,7 @@ exports.updatePicture = asyncHandler(async (req, res, next) => {
     const updatedProfile = await profile.updateOne({
       $set: {
         photo: req.file.path,
-        cloudinary_id: req.file.filename,
+        cloudinaryId: req.file.filename,
       },
     });
     res.status(200);

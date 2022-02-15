@@ -34,7 +34,7 @@ const profileSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  cloudinary_id: {
+  cloudinaryId: {
     type: String,
   },
 });

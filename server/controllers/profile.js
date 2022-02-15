@@ -15,8 +15,8 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage: storage }).single('File');
 
-// @route POST /profile//uploadPicture
-// @desc upload user profile picutre
+// @route POST /profile/uploadPicture
+// @desc upload user profile picture
 exports.uploadPicture = asyncHandler(async (req, res, next) => {
   const profile = await Profile.findById({ porfileId: req.profile.id });
   if (!profile) {
@@ -38,8 +38,8 @@ exports.uploadPicture = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @route DELETE /profile//deletePicture
-// @desc delete user profile picutre
+// @route DELETE /profile/deletePicture
+// @desc delete user profile picture
 exports.deletePicture = asyncHandler(async (req, res, next) => {
   const profile = await Profile.findById({ porfileId: req.profile.id });
   if (profile) {
@@ -56,8 +56,8 @@ exports.deletePicture = asyncHandler(async (req, res, next) => {
     throw new Error('No profile found');
   }
 });
-//@route PUT /profile//updatePicture
-// @desc update user profile picutre
+//@route PUT /profile/updatePicture
+// @desc update user profile picture
 exports.updatePicture = asyncHandler(async (req, res, next) => {
   const profile = await Profile.findById({ porfileId: req.profile.id });
   if (!profile) {

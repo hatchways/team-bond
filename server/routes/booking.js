@@ -8,7 +8,7 @@ const {
   updateBooking,
 } = require('../controllers/booking');
 
-router.route('./bookings').get(protect, getAllBookings);
+router.route('./').get(protect, getAllBookings);
 router.route('./book').post(protect, createBooking);
 router.route('./acceptOrDecline').put(protect, acceptOrDecline);
 router.route('./update').put(protect, updateBooking);

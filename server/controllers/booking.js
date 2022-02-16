@@ -1,14 +1,14 @@
 const Booking = require('../models/Booking');
 const asyncHandler = require('express-async-handler');
 
-// @route GET /booking//bookings
+// @route GET /bookings
 // @desc get all bookings of the sitter who is logged in
 exports.getAllBookings = asyncHandler(async (req, res, next) => {
   const bookings = await Booking.find({ sitterId: req.params.id });
   res.send(bookings);
 });
 
-// @route POST /booking//book
+// @route POST /booking/book
 // @desc create a new booking
 exports.createBooking = asyncHandler(async (req, res, next) => {
   const bookings = await Booking.find({ userId: req.params.id, sitterId: req.body.sitterId });
@@ -41,9 +41,6 @@ exports.acceptOrDecline = asyncHandler(async (req, res, next) => {
     res.status(500);
     throw new Error('No profile found');
   }
-  // I assume the data transfered from the FE will contain true for either accepted or declined
-  //so the result will have to be one of them true the other false no other combination
-  //i.e if after the update accepted is true then declined is false or the opposite
   const updatedBooking = booking.updateOne(req.body);
   updatedBooking.accepted
     ? res.json({ message: 'Booking accepted', updatedBooking })

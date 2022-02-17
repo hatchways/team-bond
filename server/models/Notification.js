@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
 
-const notificationSchema  = new mongoose.Schema({
+const notificationSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
   },
   title: {
-    type:String,
+    type: String,
     required: true,
   },
   description: {
-    type:String,
+    type: String,
     required: true,
   },
-  read:{
-    type:Boolean,
+  read: {
+    type: Boolean,
   },
   date: {
-    type:Date,
+    type: Date,
     required: true,
   }
 

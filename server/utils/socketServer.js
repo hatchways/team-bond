@@ -18,7 +18,7 @@ const sock = (io) => {
       const user = await User.findById(id)
      if(user) {
        console.log(`user ${user.name} is authenticated`);
-       onlineUsers.set(id,user);
+       onlineUsers.set(id,{...user, socketId:socket.id});
        console.log(onlineUsers);
        
       }

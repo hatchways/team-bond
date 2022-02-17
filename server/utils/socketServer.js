@@ -20,7 +20,7 @@ const sock = (io) => {
        console.log(`user ${user.name} is authenticated`);
        onlineUsers.set(id,{...user, socketId:socket.id});
        console.log(onlineUsers);
-       
+       return onlineUsers;       
       }
     });
     console.log("connected");
@@ -31,6 +31,7 @@ const sock = (io) => {
       onlineUsers.delete(id);
       console.log(onlineUsers);
       console.log(`user ${user.name} has logged out`);
+      return onlineUsers;
     })
   });
 }

@@ -15,6 +15,10 @@ const Payment = new mongoose.Schema({
   rate: {
     type: Number,
     required: true,
+    set: function () {
+      const sitter = await Profile.findById(this.sitterId);
+      return sitter.rate;
+    }
   },
   hoursOfService: {
     type: Number,
@@ -23,6 +27,10 @@ const Payment = new mongoose.Schema({
   totalPayment: {
     type: Number,
     required: true,
+    set: function () {
+      const processingFee = 5;
+      return (this.rate * this.hoursOfService + processingFee);
+    }
   },
   customerId: {
     type: String,
@@ -31,19 +39,7 @@ const Payment = new mongoose.Schema({
 });
 
 
-Payment = mongoose.model("Profile", profileSchema);
+module.exports = Payment = mongoose.model("Profile", profileSchema);
 
-const getRate = async () => {
-  const sitter = await Profile.findById(this.sitterId);
-  return sitter.rate;
-};
 
-const payTotalOf = () => {
-  const processingFee = 5;
-  return (this.rate * this.hoursOfService + processingFee);
-};
 
-Profile.rate = getRate();
-Profile.totalPayment = payTotalOf();
-
-module.exports = Payment;

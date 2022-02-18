@@ -65,14 +65,12 @@ const sitterSchema = Profile.discriminator(
     rate: {
       type: Number,
       required: true,
+      get: function () { return this.rate * 100; }
     },
   }),
   options
 );
 
 
-const dollarToCents = () => this.rate * 100;
-
-Profile.rate = dollarToCents();
 
 module.exports = Profile;

@@ -5,8 +5,8 @@ export interface IDemoProfile {
   photo: string;
 }
 
-// placeholder
 export interface IDemoReview {
+  id: string;
   userId: string;
   userName: string;
   sitterId: string;
@@ -17,7 +17,7 @@ export interface IDemoReview {
 
 export const demoProfiles: IDemoProfile[] = [
   {
-    id: '620a89724422dc58320b1bab',
+    id: '62100cd7369f4b8bc7cd0756',
     name: 'John Smith',
     description: `Dog Wisperer. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
       sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim
@@ -31,7 +31,8 @@ export const demoProfiles: IDemoProfile[] = [
 
 export const demoReviews: IDemoReview[] = [
   {
-    userId: '620a89724422dc58320b1bab',
+    id: '62100d118bfa6c87296e4e84',
+    userId: '62100cd7369f4b8bc7cd0756',
     userName: 'Michael Jordan',
     sitterId: '620a89724422dc58320b1bab',
     rating: 4.5,
@@ -44,7 +45,8 @@ export const demoReviews: IDemoReview[] = [
     created: new Date(2022, 1, 2),
   },
   {
-    userId: '620a89724422dc58320b1bab',
+    id: '62100d1eca5024d386ba11f9',
+    userId: '62100cd7369f4b8bc7cd0756',
     userName: 'James Cameron',
     sitterId: '620a89724422dc58320b1bab',
     rating: 5,
@@ -57,6 +59,7 @@ export const demoReviews: IDemoReview[] = [
     created: new Date(2022, 1, 3),
   },
   {
+    id: '62100d2bb28e0952daaa05d2',
     userId: '620a89724422dc58320b1bab',
     userName: 'Katie Perry',
     sitterId: '620a89724422dc58320b1bab',
@@ -70,6 +73,7 @@ export const demoReviews: IDemoReview[] = [
     created: new Date(2022, 1, 3),
   },
   {
+    id: '62100d3a67c2fc284a746587',
     userId: '620a89724422dc58320b1bab',
     userName: 'Katie Perry',
     sitterId: '620a89724422dc58320b1bab',

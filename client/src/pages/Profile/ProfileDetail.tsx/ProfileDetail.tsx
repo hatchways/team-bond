@@ -15,13 +15,6 @@ const ProfileDetail = (): JSX.Element => {
   const [demoProfile, setDemoProfile] = useState<IDemoProfile>(demoProfiles[0]); // static until backend inplemented
   const [_demoReviews, setDemoReviews] = useState<IDemoReview[]>(demoReviews); // static until backend inplemented
 
-  useEffect(() => {
-    // TODO call when API exists
-    // getProfile(id).then((res) => {
-    //   setDemoProfile(res as ProfileDetails);
-    // });
-  }, [id]);
-
   return (
     <PageContainer>
       <Card
@@ -67,8 +60,8 @@ const ProfileDetail = (): JSX.Element => {
           </Grid>
           <Grid item xs={12} container>
             <Grid item xs container direction="column" spacing={2}>
-              {_demoReviews.map((item: IDemoReview, index: number) => (
-                <ProfileReview key={index} review={{ ...item }} />
+              {_demoReviews.map((item: IDemoReview) => (
+                <ProfileReview key={item.id} review={{ ...item }} />
               ))}
             </Grid>
           </Grid>

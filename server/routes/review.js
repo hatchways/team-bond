@@ -5,6 +5,6 @@ const { createReview, getallreviewsforSitter } = require('../controllers/review'
 
 router.route('/reviews').get(protect, getallreviewsforSitter);
 
-router.route('/create').post(protect, create);
+router.route('/create').post(protect, createReview);
 
 module.exports = router;

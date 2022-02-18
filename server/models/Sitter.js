@@ -1,3 +1,5 @@
+
+//!! if using discriminator then schema has to be in the same file as parent schema
 // const mongoose = require('mongoose');
 // const profileSchema = require('./Profile');
 

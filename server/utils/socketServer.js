@@ -33,6 +33,7 @@ const sock = (io) => {
       console.log(`user ${user.name} has logged out`);
       return onlineUsers;
     });
+    socket.on()
   });
 };
 

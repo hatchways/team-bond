@@ -123,18 +123,22 @@ exports.getProfile = asyncHandler(async (req, res, next) => {
   const searchableId = req.params.id;
   let profile;
   try {
-    // Leaving out validating the mongodb ID object for now
     profile = await Profile.findById({ _id: searchableId }, "name description photo");
     if (!profile) {
-      res.status(404);
-      throw new Error(`Profile with id ${searchableId} doesn't exist`);
+      res.status(404).json({
+        error: {
+          message: `Profile with id ${searchableId} doesn't exist`
+        }
+      });
     }
-  
-    res.status(200).json({
-      success: {
-        profile
-      }
-    });
+    
+    if (profile) {
+      res.status(200).json({
+        success: {
+          profile
+        }
+      });
+    }
   } catch {
     res.status(500);
     throw new Error("Internal Server Error");

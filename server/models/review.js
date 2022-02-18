@@ -9,7 +9,7 @@ const reviewSchema = new mongoose({
   sitterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Sitter',
+    ref: 'Profile',
   },
   rating: {
     type: Number,

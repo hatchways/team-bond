@@ -28,7 +28,7 @@ const notificationSchema = new mongoose.Schema({
   sitterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: false,
-    ref: 'Sitter',
+    ref: 'Profile',
   },
 });
 

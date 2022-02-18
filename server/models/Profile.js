@@ -40,5 +40,39 @@ const profileSchema = new mongoose.Schema(
   },
   options
 );
+const Profile = mongoose.model('Profile', profileSchema);
 
-module.exports = Profile = mongoose.model('Profile', profileSchema);
+const sitterSchema = Profile.discriminator(
+  'Sitter',
+  new mongoose.Schema({
+    stripeConnectId: {
+      type: String,
+      required: true,
+    },
+    availabilityId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
+    activeScheduleId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
+    requests: {
+      type: [mongoose.Schema.Types.ObjectId],
+      required: true,
+      ref: 'Request',
+    },
+    rate: {
+      type: Number,
+      required: true,
+    },
+  }),
+  options
+);
+
+
+const dollarToCents = () => this.rate * 100;
+
+Profile.rate = dollarToCents();
+
+module.exports = mongoose.model('Profile', profileSchema);

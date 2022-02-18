@@ -2,7 +2,7 @@ const notificationContent = new Map();
 
 const bookingRequested = {
   title: 'Booking requested',
-  description: 'booking request generated',
+  description:'',
   read: false,
   date: new Date(),
 };
@@ -27,6 +27,6 @@ const bookingPayed = {
   date: new Date(),
 };
 
-notificationContent.set([[accepted, bookingAccepted], [declined, bookingDeclined], [requested, bookingRequested], [payed, bookingPayed]]);
+notificationContent.set([['accepted', bookingAccepted], ['declined', bookingDeclined], ['requested', bookingRequested], ['payed', bookingPayed]]);
 
-export default notificationContent;
+module.exports = notificationContent;

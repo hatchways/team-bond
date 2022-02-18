@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const bookingSchema = new mongoose({
+const bookingSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -9,7 +9,7 @@ const bookingSchema = new mongoose({
   sitterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Sitter',
+    ref: 'Profile',
   },
 
   start: {
@@ -19,7 +19,7 @@ const bookingSchema = new mongoose({
   end: {
     type: Date,
     required: true,
-    min: start,
+    min: this.start,
   },
   accepted: {
     type: Boolean,
@@ -35,13 +35,16 @@ const bookingSchema = new mongoose({
   },
   pending: {
     type: Boolean,
-    set: isPending,
+    default: true,
   },
 });
 
-const isPending = (accepted, declined) => {
-  !accepted && !declined ? true : false;
-};
 
 //Request is a constructor so I cant use it
-module.exports = Bookings = mongoose.model('Bookings', profileSchema);
+module.exports = Booking = mongoose.model('Booking', bookingSchema);
+
+const isPending = () => {
+  !this.accepted && !this.declined ? true : false;
+};
+
+Booking.pending = isPending();

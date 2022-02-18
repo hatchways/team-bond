@@ -49,20 +49,19 @@ exports.acceptOrDecline = asyncHandler(async (req, res, next) => {
 
 // @route PUT /booking/update
 // @desc update booking by client and reset the updated booking to pending
-exports.updateBooking(
-  syncHandler(async (req, res, next) => {
-    const booking = await Booking.findById(req.params.id);
-    if (!booking) {
-      res.status(500);
-      throw new Error('No profile found');
-    }
-    const updatedBookingInfo = { ...req.body, accepted: false, declined: false };
-    const updatedBooking = booking.updateOne(updatedBookingInfo);
-    res.status(201).json({
-      success: {
-        updatedBooking,
-      },
-      message: 'Booking successfully update but still needs approval of the sitter',
-    });
-  })
-);
+exports.updateBooking = asyncHandler(async (req, res, next) => {
+  const booking = await Booking.findById(req.params.id);
+  if (!booking) {
+    res.status(500);
+    throw new Error('No profile found');
+  }
+  const updatedBookingInfo = { ...req.body, accepted: false, declined: false };
+  const updatedBooking = booking.updateOne(updatedBookingInfo);
+  res.status(201).json({
+    success: {
+      updatedBooking,
+    },
+    message: 'Booking successfully update but still needs approval of the sitter',
+  });
+});
+

@@ -10,7 +10,7 @@ const Payment = new mongoose.Schema({
   sitterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Sitter',
+    ref: 'Profile',
   },
   rate: {
     type: Number,
@@ -30,7 +30,8 @@ const Payment = new mongoose.Schema({
   },
 });
 
-module.exports = Profile = mongoose.model("Profile", profileSchema);
+
+Payment = mongoose.model("Profile", profileSchema);
 
 const getRate = async () => {
   const sitter = await Profile.findById(this.sitterId);
@@ -44,3 +45,5 @@ const payTotalOf = () => {
 
 Profile.rate = getRate();
 Profile.totalPayment = payTotalOf();
+
+module.exports = Payment;

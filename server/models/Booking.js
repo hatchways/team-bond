@@ -41,10 +41,11 @@ const bookingSchema = new mongoose.Schema({
 
 
 //Request is a constructor so I cant use it
-module.exports = Booking = mongoose.model('Booking', bookingSchema);
+Booking = mongoose.model('Booking', bookingSchema);
 
 const isPending = () => {
   !this.accepted && !this.declined ? true : false;
 };
-
 Booking.pending = isPending();
+
+module.exports = Booking;

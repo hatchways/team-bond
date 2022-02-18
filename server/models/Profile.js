@@ -75,4 +75,4 @@ const dollarToCents = () => this.rate * 100;
 
 Profile.rate = dollarToCents();
 
-module.exports = mongoose.model('Profile', profileSchema);
+module.exports = Profile;

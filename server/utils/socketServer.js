@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/User');
-//const Sitter = require('../models/Sitter.js');
 const Profile = require('../models/Profile');
 const notificationContent = require('../templates/notificationTemplates');
 const onlineUsers = new Map();

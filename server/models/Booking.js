@@ -19,7 +19,7 @@ const bookingSchema = new mongoose({
   end: {
     type: Date,
     required: true,
-    min: start,
+    min: this.start,
   },
   accepted: {
     type: Boolean,

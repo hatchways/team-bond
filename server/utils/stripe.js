@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECERT);
 const Booking = require('../models/Booking');
-const Sitter = require('../models/Sitter');
+const Profile = require('../models/Profile');
 
 const booking = Booking.findById(req.params.id);
 exports.createStripeCustomer = async () => {
@@ -14,7 +14,7 @@ exports.createStripeCustomer = async () => {
 };
 
 exports.chargeCustomer = async (id) => {
-  const sitter = await Sitter.findById(booking.sitterId);
+  const sitter = await Profile.findById(booking.sitterId);
   const startDate = new Date(booking.start);
   const endDate = new Date(booking.end);
   const diff = Math.abs(startDate - endDate);

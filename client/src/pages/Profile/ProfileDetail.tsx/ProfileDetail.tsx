@@ -1,11 +1,10 @@
-import { Avatar, Box, Grid, Paper, Typography } from '@mui/material';
+import { Avatar, Card, Divider, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageContainer from '../../../components/PageContainer/PageContainer';
-import getProfile from '../../../helpers/APICalls/getProfile';
-import { ProfileDetails } from '../../../interface/ProfileDetails';
-import { demoProfiles, IDemoProfile } from '../temp/demo_profiles';
-import StarIcon from '@mui/icons-material/Star';
+import { demoProfiles, demoReviews, IDemoProfile, IDemoReview } from '../temp/demo_data';
+import ProfileRating from '../../../components/ProfileRating/ProfileRating';
+import ProfileReview from '../../../components/ProfileReview/ProfileReview';
 
 type ProfileDetailParams = {
   id: string;
@@ -13,7 +12,8 @@ type ProfileDetailParams = {
 
 const ProfileDetail = (): JSX.Element => {
   const { id } = useParams<ProfileDetailParams>();
-  const [profile, setDemoProfile] = useState<IDemoProfile>(demoProfiles[0]); // static until backend inplemented
+  const [demoProfile, setDemoProfile] = useState<IDemoProfile>(demoProfiles[0]); // static until backend inplemented
+  const [_demoReviews, setDemoReviews] = useState<IDemoReview[]>(demoReviews); // static until backend inplemented
 
   useEffect(() => {
     // TODO call when API exists
@@ -24,36 +24,56 @@ const ProfileDetail = (): JSX.Element => {
 
   return (
     <PageContainer>
-      <Grid container direction="row" justifyContent="center" alignItems="center">
-        <Grid item xs={12} sm={8} md={7} elevation={6} component={Paper} square>
-          <Box display="flex" justifyContent="space-between" alignItems="flex-start" flexDirection="column">
-            <Box width="100%" maxWidth={450} p={3} alignSelf="center">
-              <Grid container>
-                <Grid item xs>
-                  <Typography component="h1" variant="h5">
-                    Welcome back!
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Box>
-            <Box width="100%" maxWidth={450} p={3} alignSelf="center">
-              <Grid container>
-                <Grid item xs>
-                  <Avatar alt="Example Alt" src="/favicon.ico" />
-                </Grid>
-              </Grid>
-            </Box>
-            <Box width="100%" maxWidth={450} p={3} alignSelf="center">
-              <Grid container>
-                <Grid item xs>
-                  <StarIcon sx={{ color: '#000000' }} />
-                </Grid>
-              </Grid>
-            </Box>
-            <Box p={1} alignSelf="center" />
-          </Box>
+      <Card
+        sx={{
+          p: 4,
+          margin: 'auto',
+          maxWidth: 600,
+          maxHeight: '85vh',
+          height: 'auto',
+          overflowY: 'scroll',
+          minHeight: '50vh',
+          marginBottom: '20px',
+          flexGrow: 1,
+          backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
+        }}
+      >
+        <Grid container spacing={2}>
+          <Grid container direction="row" justifyContent="flex-start" alignItems="center" item xs={12}>
+            <Grid item xs={2}>
+              <Avatar alt="Example Alt" src="/favicon.ico" sx={{ width: 70, height: 70 }} />
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom variant="subtitle1" component="div">
+                {demoProfile.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <ProfileRating label="4.5" />
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sx={{ marginTop: '30px' }}>
+            <Divider variant="middle" sx={{ marginTop: '10px', marginBottom: '10px' }}>
+              Description
+            </Divider>
+            <Typography gutterBottom variant="subtitle1" component="div">
+              {demoProfile.description}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Divider variant="middle" sx={{ marginTop: '20px', marginBottom: '20px' }}>
+              Reviews
+            </Divider>
+          </Grid>
+          <Grid item xs={12} container>
+            <Grid item xs container direction="column" spacing={2}>
+              {_demoReviews.map((item: IDemoReview, index: number) => (
+                <ProfileReview key={index} review={{ ...item }} />
+              ))}
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
+      </Card>
     </PageContainer>
   );
 };

@@ -2,7 +2,7 @@ const colors = require("colors");
 const path = require("path");
 const http = require("http");
 const express = require("express");
-const {Server} = require("socket.io");
+const { Server } = require("socket.io");
 const { notFound, errorHandler } = require("./middleware/error");
 const connectDB = require("./db");
 const { join } = require("path");
@@ -24,7 +24,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*",
-    credentals:true,
+    credentials: true,
   },
 });
 

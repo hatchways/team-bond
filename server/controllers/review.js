@@ -19,7 +19,7 @@ exports.createReview = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.getallreviewsforSitter = asyncHandler(async (req, res, next) => {
+exports.getAllReviewsForSitter = asyncHandler(async (req, res, next) => {
   const reviews = Review.find({
     sitterId: req.body.sitterId,
   });

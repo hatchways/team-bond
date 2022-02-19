@@ -1,6 +1,8 @@
 const Booking = require('../models/Booking');
 const asyncHandler = require('express-async-handler');
 
+
+
 // @route GET /bookings
 // @desc get all bookings of the sitter who is logged in
 exports.getAllBookings = asyncHandler(async (req, res, next) => {
@@ -11,7 +13,7 @@ exports.getAllBookings = asyncHandler(async (req, res, next) => {
 // @route POST /booking/book
 // @desc create a new booking
 exports.createBooking = asyncHandler(async (req, res, next) => {
-  const bookings = await Booking.find({ userId: req.params.id, sitterId: req.body.sitterId });
+  const bookings = await Booking.find({ userId: req.params.id, sitterId: req.body.userId });
   if (bookings) {
     bookings.map((booking) => {
       if (booking.start === req.body.start || booking.end === req.body.end) {
@@ -64,4 +66,3 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
     message: 'Booking successfully update but still needs approval of the sitter',
   });
 });
-

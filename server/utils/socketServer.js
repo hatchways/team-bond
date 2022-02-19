@@ -18,11 +18,8 @@ const sock = (io) => {
       const cookie = socket.handshake.headers.cookie;
       const id = getId(cookie);
       const user = await User.findById(id);
-      console.log(user);
       if (user) {
-        console.log(`user ${user.name} is authenticated`);
         onlineUsers.set(id, { ...user._doc, socketId: socket.id });
-        console.log(onlineUsers);
         return onlineUsers;
       }
     });
@@ -32,8 +29,6 @@ const sock = (io) => {
       const id = getId(cookie);
       const user = await User.findById(id);
       onlineUsers.delete(id);
-      console.log(onlineUsers);
-      console.log(`user ${user.name} has logged out`);
       return onlineUsers;
     });
     socket.on('requested', async () => {

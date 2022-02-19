@@ -49,6 +49,7 @@ app.use('/users', userRouter);
 app.use('/profile', profileRouter);
 app.use('/booking', bookingRouter);
 
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/client/build')));
 

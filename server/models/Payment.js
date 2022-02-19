@@ -10,14 +10,14 @@ const Payment = new mongoose.Schema({
   sitterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Profile',
+    ref: 'User',
   },
   rate: {
     type: Number,
     required: true,
     set: function () {
-      const sitter = await Profile.findById(this.sitterId);
-      return sitter.rate;
+      const sitterProfile = await Profile.findById(this.sitterId);
+      return sitterProfile.rate;
     }
   },
   hoursOfService: {
@@ -39,7 +39,7 @@ const Payment = new mongoose.Schema({
 });
 
 
-module.exports = Payment = mongoose.model("Profile", profileSchema);
+module.exports = Payment = mongoose.model("Payment", paymentSchema);
 
 
 

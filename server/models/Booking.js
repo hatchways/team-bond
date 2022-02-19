@@ -9,7 +9,7 @@ const bookingSchema = new mongoose.Schema({
   sitterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Profile',
+    ref: 'User',
   },
 
   start: {

@@ -1,13 +1,14 @@
-const colors = require('colors');
-const path = require('path');
-const http = require('http');
-const express = require('express');
-const socketio = require('socket.io');
-const { notFound, errorHandler } = require('./middleware/error');
-const connectDB = require('./db');
-const { join } = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const colors = require("colors");
+const path = require("path");
+const http = require("http");
+const express = require("express");
+const { Server } = require("socket.io");
+const { notFound, errorHandler } = require("./middleware/error");
+const connectDB = require("./db");
+const { join } = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const jwt = require("jsonwebtoken");
 
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
@@ -20,15 +21,15 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
-const io = socketio(server, {
+const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: "*",
+    credentials: true,
   },
 });
 
-io.on('connection', (socket) => {
-  console.log('connected');
-});
+require('./utils/socketServer')(io);
+
 
 if (process.env.NODE_ENV === 'development') {
   app.use(logger('dev'));

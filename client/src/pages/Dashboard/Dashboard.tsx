@@ -12,11 +12,12 @@ export default function Dashboard(): JSX.Element {
 
   useEffect(() => {
     initSocket();
-  }, [initSocket]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loggedInUser === undefined) return <CircularProgress />;
   if (!loggedInUser) {
-    history.push('/login');
+    // history.push('/login');
     // loading for a split seconds until history.push works
     return <CircularProgress />;
   }

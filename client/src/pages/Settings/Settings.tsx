@@ -6,8 +6,8 @@ import PageContainer from '../../components/PageContainer/PageContainer';
 import { makeStyles } from '@mui/styles';
 import SettingsWrapper from '../../components/SettingsWrapper/SettingsWrapper';
 import EditProfile from './EditProfile/EditProfile';
+import Availability from './Availability/Availability';
 import SettingHeader from '../../components/SettingsHeader/SettingsHeader';
-
 const settingsMenu = [
   {
     name: 'Edit profile',
@@ -22,7 +22,7 @@ const settingsMenu = [
   {
     name: 'Availability',
     to: '/profile/settings/availability',
-    component: <SettingHeader header="Availability" />,
+    component: <Availability />,
   },
   {
     name: 'Payment methods',
@@ -43,12 +43,12 @@ export default function Settings(): JSX.Element {
   const history = useHistory();
   const classes = useStyles();
 
-  if (loggedInUser === undefined) return <CircularProgress />;
-  if (!loggedInUser || !profile) {
-    history.push('/login');
-    // loading for a split seconds until history.push works
-    return <CircularProgress />;
-  }
+  // if (loggedInUser === undefined) return <CircularProgress />;
+  // if (!loggedInUser || !profile) {
+  //   history.push('/login');
+  //   // loading for a split seconds until history.push works
+  //   return <CircularProgress />;
+  // }
 
   return (
     <PageContainer>

@@ -3,11 +3,13 @@ import login from '../../helpers/APICalls/login';
 import LoginForm from './LoginForm/LoginForm';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import { useSocket } from '../../context/useSocketContext';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import AuthPageWrapper from '../../components/AuthPageWrapper/AuthPageWrapper';
 import AuthPageFooter from '../../components/AuthPageFooter/AuthPageFooter';
 
 export default function Login(): JSX.Element {
+  const { socket } = useSocket();
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
 
@@ -20,6 +22,7 @@ export default function Login(): JSX.Element {
         setSubmitting(false);
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
+        socket ? socket.emit('authenticate') : null;
         updateLoginContext(data.success);
       } else {
         // should not get here from backend but this catch is for an unknown issue

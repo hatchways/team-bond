@@ -19,6 +19,11 @@ for (let i = 0; i < 25; i++) {
 
 const rows = days.map((day, i) => {
   const row = {
+    checkbox: (
+      <label key={i}>
+        <Field type="checkbox" name={day} />
+      </label>
+    ),
     day: day,
     from: (
       <Field name="to" component="select">
@@ -66,9 +71,10 @@ function DropDownItem(): JSX.Element {
         <form onSubmit={handleSubmit}>
           <label htmlFor="available">
             <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 450 }} aria-label="simple table">
+              <Table sx={{ minWidth: 350 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
+                    <TableCell align="left">available</TableCell>
                     <TableCell align="right">Days</TableCell>
                     <TableCell align="right">From</TableCell>
                     <TableCell align="right">To</TableCell>
@@ -77,9 +83,10 @@ function DropDownItem(): JSX.Element {
                 <TableBody>
                   {rows.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell align="left">{row.checkbox}</TableCell>
                       <TableCell align="right">{row.day}</TableCell>
-                      <TableCell align="right">{row.from}</TableCell>
-                      <TableCell align="right">{row.to}</TableCell>
+                      <TableCell align="right">from {row.from}</TableCell>
+                      <TableCell align="right">to {row.to}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -93,44 +100,3 @@ function DropDownItem(): JSX.Element {
 }
 
 export default DropDownItem;
-//       <form onSubmit={handleSubmit}>
-//           {days.map((day, i) => {
-//             return (
-//               <Grid container key={i}>
-//                 <Grid item key={i} sx={{ padding: '10px' }}>
-//                   <label key={i}>
-//                     <Field type="checkbox" name={day} />
-//                     {day}
-//                   </label>
-//                   <label htmlFor="available">
-//                     <Typography component="span" sx={{ paddingX: '10px' }}>
-//                       from
-//                     </Typography>
-//                     <Field name={i} component="select">
-//                       {options.map((option, i) => {
-//                         return (
-//                           <option key={i} value={option.value}>
-//                             {option.label}
-//                           </option>
-//                         );
-//                       })}
-//                     </Field>
-//                     <span>to</span>
-//                     <Field name={options[i].value} component="select">
-//                       {options.map((option, i) => {
-//                         return (
-//                           <>
-//                             <option key={i} value={option.value}>
-//                               {option.label}
-//                             </option>
-//                           </>
-//                         );
-//                       })}
-//                     </Field>
-//                   </label>
-//                 </Grid>
-//               </Grid>
-//             );
-//           })}
-//           <button type="submit">Submit</button>
-//       </form>

@@ -1,13 +1,14 @@
 import { Formik, Field } from 'formik';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import ro from 'date-fns/esm/locale/ro/index.js';
+import { useState } from 'react';
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday,', 'Friday', 'Saturday'];
 const options: { value: string; label: string }[] = [];
@@ -26,7 +27,7 @@ const rows = days.map((day, i) => {
     ),
     day: day,
     from: (
-      <Field name="to" component="select">
+      <Field disabled="" name="from" component="select">
         {options.map((option, i) => {
           return (
             <option key={i} value={option.value}>
@@ -37,7 +38,7 @@ const rows = days.map((day, i) => {
       </Field>
     ),
     to: (
-      <Field name="from" component="select">
+      <Field name="to" component="select">
         {options.map((option, i) => {
           return (
             <option key={i} value={option.value}>
@@ -52,48 +53,51 @@ const rows = days.map((day, i) => {
 });
 
 const initialValues = {
-  startTime: '',
-  endTime: '',
+  from: '00:00',
+  to: '00:00',
 };
 
 function DropDownItem(): JSX.Element {
-  console.log('yyyy', rows);
+  const [checked, setChecked] = useState(false);
   return (
     <Formik
       onSubmit={(values) => {
         console.log(values);
-        values.startTime >= values.endTime
-          ? alert('start time must be earlier then end time')
-          : alert('availability set');
+        values.from >= values.to ? alert('start time must be earlier then end time') : alert('availability set');
       }}
       initialValues={{ ...initialValues }}
       render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="available">
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 350 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left">available</TableCell>
-                    <TableCell align="right">Days</TableCell>
-                    <TableCell align="right">From</TableCell>
-                    <TableCell align="right">To</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((row, i) => (
-                    <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell align="left">{row.checkbox}</TableCell>
-                      <TableCell align="right">{row.day}</TableCell>
-                      <TableCell align="right">from {row.from}</TableCell>
-                      <TableCell align="right">to {row.to}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </label>
-        </form>
+        <>
+          <Typography align="center" variant="h5" component="div" gutterBottom>
+            Your availability
+          </Typography>
+          <form
+            onSubmit={handleSubmit}
+            onClick={(e: React.ChangeEvent<any>) => {
+              console.log('xx', checked);
+              console.log(e.target.checked);
+              setChecked(e.target.checked);
+              console.log('yy', checked);
+            }}
+          >
+            <label htmlFor="available">
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 350 }} aria-label="simple table">
+                  <TableBody style={{ border: '1px solid grey' }}>
+                    {rows.map((row, i) => (
+                      <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell align="left">{row.checkbox}</TableCell>
+                        <TableCell align="right">{row.day}</TableCell>
+                        <TableCell align="right"> from {row.from}</TableCell>
+                        <TableCell align="right">to {row.to}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </label>
+          </form>
+        </>
       )}
     ></Formik>
   );

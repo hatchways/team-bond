@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const protect = require('../middleware/auth');
-const validateMongoObjectId = require('../middleware/validate');
+const { validateMongoObjectId } = require('../validate');
 const {
   editProfile,
   loadProfile,

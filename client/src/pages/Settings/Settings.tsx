@@ -80,7 +80,7 @@ export default function Settings(): JSX.Element {
             </Box>
           ))}
         </Grid>
-        <Grid xs={9} item>
+        <Grid xs={9} sx={{ justifyItems: 'center' }} item>
           <Switch>
             <Route exact path="/profile/settings">
               <Redirect to="/profile/settings/edit-profile" />

@@ -1,64 +1,17 @@
 import { Formik, Field } from 'formik';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import { useState } from 'react';
-
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday,', 'Friday', 'Saturday'];
-const options: { value: string; label: string }[] = [];
-for (let i = 0; i < 25; i++) {
-  i < 10
-    ? options.push({ value: `0${i}:00`, label: `0${i}:00` })
-    : options.push({ value: `${i}:00`, label: `${i}:00` });
-}
-
-const rows = days.map((day, i) => {
-  const row = {
-    checkbox: (
-      <label key={i}>
-        <Field type="checkbox" name={day} />
-      </label>
-    ),
-    day: day,
-    from: (
-      <Field disabled="" name="from" component="select">
-        {options.map((option, i) => {
-          return (
-            <option key={i} value={option.value}>
-              {option.label}
-            </option>
-          );
-        })}
-      </Field>
-    ),
-    to: (
-      <Field name="to" component="select">
-        {options.map((option, i) => {
-          return (
-            <option key={i} value={option.value}>
-              {option.label}
-            </option>
-          );
-        })}
-      </Field>
-    ),
-  };
-  return row;
-});
+import AvailabilityTable from '../../../components/AvailabityTable/AvailabiltyTable';
+import { CollectionsOutlined } from '@mui/icons-material';
 
 const initialValues = {
   from: '00:00',
   to: '00:00',
+  schedule: '',
 };
-
+const schedules = [{ name: 'work week' }, { name: 'holiday week' }];
 function DropDownItem(): JSX.Element {
-  const [checked, setChecked] = useState(false);
   return (
     <Formik
       onSubmit={(values) => {
@@ -68,33 +21,40 @@ function DropDownItem(): JSX.Element {
       initialValues={{ ...initialValues }}
       render={({ handleSubmit }) => (
         <>
-          <Typography align="center" variant="h5" component="div" gutterBottom>
+          <Typography align="center" variant="h5" component="div" fontWeight={600} gutterBottom>
             Your availability
           </Typography>
           <form
             onSubmit={handleSubmit}
             onClick={(e: React.ChangeEvent<any>) => {
-              console.log('xx', checked);
-              console.log(e.target.checked);
-              setChecked(e.target.checked);
-              console.log('yy', checked);
+              console.log(e);
             }}
           >
+            <label>
+              <Field name="schedule" component="select" style={{ height: '30px' }}>
+                {schedules.map((schedule, i) => {
+                  return (
+                    <option key={schedule.name} value={schedule.name}>
+                      {schedule.name}
+                    </option>
+                  );
+                })}
+              </Field>
+            </label>
+            <button
+              type="reset"
+              style={{ marginLeft: '5px', height: '30px', color: 'white', backgroundColor: '#f14140' }}
+            >
+              + new schedule
+            </button>
+
+            <label>
+              <Typography align="left" fontWeight={800} sx={{ marginY: 3 }} gutterBottom>
+                Set your weekly hours
+              </Typography>
+            </label>
             <label htmlFor="available">
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 350 }} aria-label="simple table">
-                  <TableBody style={{ border: '1px solid grey' }}>
-                    {rows.map((row, i) => (
-                      <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                        <TableCell align="left">{row.checkbox}</TableCell>
-                        <TableCell align="right">{row.day}</TableCell>
-                        <TableCell align="right"> from {row.from}</TableCell>
-                        <TableCell align="right">to {row.to}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <AvailabilityTable />
             </label>
           </form>
         </>

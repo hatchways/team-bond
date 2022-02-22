@@ -18,30 +18,28 @@ const ProfileReview = ({ review }: Props) => {
       alignItems="flex-start"
       sx={{ marginBottom: '10px' }}
     >
-      <Grid item xs={2} sx={{ paddingTop: '10px' }}>
+      <Grid item md={2} xs={12} sx={{ paddingTop: '10px' }}>
         <Avatar sx={{ bgcolor: '#ff5722', width: 50, height: 50 }}>{initialsFromName(review.userName)}</Avatar>
       </Grid>
-      <Grid item xs sx={{ marginLeft: '0px' }}>
-        <Grid item xs>
-          <Typography gutterBottom variant="subtitle1" component="div">
+      <Grid item md={10} xs={12} sx={{ marginLeft: '0px' }}>
+        <Grid item md={12} xs={12}>
+          <Typography gutterBottom variant="subtitle2" component="div">
             {review.userName}
           </Typography>
         </Grid>
         <Grid container direction="row" justifyContent="flex-start" alignItems="center">
-          <Grid item xs={2} sx={{ marginRight: '10px' }}>
+          <Grid item md={2} xs={12} sx={{ marginRight: '10px' }}>
             <ProfileRating label={review.rating.toString()} />
           </Grid>
           <Grid item xs>
-            <Typography gutterBottom variant="subtitle1" component="div">
-              {review.created.toLocaleDateString('en-us', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </Typography>
+            {review.created.toLocaleDateString('en-us', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
           </Grid>
         </Grid>
-        <Grid item xs sx={{ marginTop: '15px' }}>
+        <Grid xs={12} item sx={{ marginTop: '15px' }}>
           <Typography variant="body2" gutterBottom>
             {review.review}
           </Typography>

@@ -67,12 +67,13 @@ const BookingForm = ({ loggedInUser, profile, sitterId }: Props) => {
       }}
       elevation={1}
     >
-      <CardHeader>
-        <Typography variant="subtitle1">Book now</Typography>
-      </CardHeader>
       {(!loggedInUser || !profile) && <CircularProgress />}
       <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start">
-        <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" xs={4}>
+        <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start">
+          <Grid item sx={{ marginBottom: '25px' }}>
+            <Typography variant="subtitle1">Book now</Typography>
+          </Grid>
+
           <Formik
             initialValues={{
               userId: booking.userId ?? '',

@@ -1,36 +1,14 @@
 const mongoose = require('mongoose');
 
-const MIN = 0;
-const MAX = 2359;
+/**
+ * Minimum allowed minutes
+ */
+const MINIMUM = 0;
 
-const time = new mongoose.Schema({
-  hour: {
-    type: Number,
-    min: 0,
-    max: 23
-  },
-  minute: {
-    type: Number,
-    min: 0,
-    max: 60,
-    default: 0
-  },
-})
-
-const range = new mongoose.Schema({
-  from: {
-    type: Number,
-    min: 0,
-    max: 2359,
-    default: 0
-  },
-  to: {
-    type: Number,
-    min: 0,
-    max: 2359,
-    default: 0
-  }
-});
+/**
+ * Maximum allowed minutes (24 hours - 1 minute)
+ */
+const MAXIMUM = 1439;
 
 const availabilitySchema = new mongoose.Schema({
   sitterId: {
@@ -40,75 +18,108 @@ const availabilitySchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: false
+    default: false,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
   },
   monday: {
     from: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     },
     to: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     }
   },
   tuesday: {
     from: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     },
     to: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     }
   },
   wednesday: {
     from: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     },
     to: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     }
   },
   thursday: {
     from: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     },
     to: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     }
   },
   friday: {
     from: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     },
     to: {
-      type: Number,
-      min: 0,
-      max: 2359,
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
+      default: 0
+    }
+  },
+  saturday: {
+    from: {
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
+      default: 0
+    },
+    to: {
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
+      default: 0
+    }
+  },
+  sunday: {
+    from: {
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
+      default: 0
+    },
+    to: {
+      type: Number, // minutes
+      min: MINIMUM,
+      max: MAXIMUM,
       default: 0
     }
   },

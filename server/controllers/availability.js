@@ -63,7 +63,9 @@ exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
     || query.hasOwnProperty('tuesday')
     || query.hasOwnProperty('wednesday')
     || query.hasOwnProperty('thursday')
-    || query.hasOwnProperty('friday');
+    || query.hasOwnProperty('friday')
+    || query.hasOwnProperty('saturday')
+    || query.hasOwnProperty('sunday');
 
   
   if (!queryHasAvailabilities) {
@@ -71,7 +73,7 @@ exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
     throw new Error("Availability required in query string");
   }
 
-  const specTime = {
+  const customerSpec = {
     monday: query.monday ?? { from: 0, to: 0 },
     tuesday: query.tuesday ?? { from: 0, to: 0 },
     wednesday: query.wednesday ?? { from: 0, to: 0},
@@ -82,26 +84,20 @@ exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
   };
 
   const availableSitters = await Availability.find({
-    'monday.from': { $lte: specTime.monday.from },
-    'monday.to': { $gte: specTime.monday.to },
-    //
-    'tuesday.from': { $lte: specTime.tuesday.from },
-    'tuesday.to': { $gte: specTime.tuesday.to },
-    //
-    'wednesday.from': { $lte: specTime.wednesday.from },
-    'wednesday.to': { $gte: specTime.wednesday.to },
-    //
-    'thursday.from': { $lte: specTime.thursday.from },
-    'thursday.to': { $gte: specTime.thursday.to },
-    //
-    'friday.from': { $lte: specTime.friday.from },
-    'friday.to': { $gte: specTime.friday.to },
-    //
-    'saturday.from': { $lte: specTime.saturday.from },
-    'saturday.to': { $gte: specTime.saturday.to },
-    //
-    'sunday.from': { $lte: specTime.sunday.from },
-    'sunday.to': { $gte: specTime.sunday.to },
+    'monday.from': { $lte: customerSpec.monday.from },
+    'monday.to': { $gte: customerSpec.monday.to },
+    'tuesday.from': { $lte: customerSpec.tuesday.from },
+    'tuesday.to': { $gte: customerSpec.tuesday.to },
+    'wednesday.from': { $lte: customerSpec.wednesday.from },
+    'wednesday.to': { $gte: customerSpec.wednesday.to },
+    'thursday.from': { $lte: customerSpec.thursday.from },
+    'thursday.to': { $gte: customerSpec.thursday.to },
+    'friday.from': { $lte: customerSpec.friday.from },
+    'friday.to': { $gte: customerSpec.friday.to },
+    'saturday.from': { $lte: customerSpec.saturday.from },
+    'saturday.to': { $gte: customerSpec.saturday.to },
+    'sunday.from': { $lte: customerSpec.sunday.from },
+    'sunday.to': { $gte: customerSpec.sunday.to },
   });
 
   res.status(200).json({

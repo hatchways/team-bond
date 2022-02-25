@@ -15,37 +15,34 @@ exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
     || query.hasOwnProperty('saturday')
     || query.hasOwnProperty('sunday');
 
-  
+  // validate at least one day passed as filter
   if (!queryHasAvailabilities) {
     res.status(400);
     throw new Error("Availability required in query string");
   }
 
-  const customerSpec = {
-    monday: query.monday ?? { from: 0, to: 0 },
-    tuesday: query.tuesday ?? { from: 0, to: 0 },
-    wednesday: query.wednesday ?? { from: 0, to: 0},
-    thursday: query.thursday ?? { from: 0, to: 0 },
-    friday: query.friday ?? { from: 0, to: 0 },
-    saturday: query.saturday ?? { from: 0, to: 0 },
-    sunday: query.sunday ?? { from: 0, to: 0 },
-  };
+  const customerSpec = {};
+  const days = [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday'
+  ];
+
+  // build spec
+  days.forEach((day) => {
+    if (query.hasOwnProperty(day)) {
+      customerSpec[`${day}.from`] = { $lte: query[day].from };
+      customerSpec[`${day}.to`] = { $gte: query[day].to };
+    }
+  });
 
   const availableSitters = await Availability.find({
-    'monday.from': { $lte: customerSpec.monday.from },
-    'monday.to': { $gte: customerSpec.monday.to },
-    'tuesday.from': { $lte: customerSpec.tuesday.from },
-    'tuesday.to': { $gte: customerSpec.tuesday.to },
-    'wednesday.from': { $lte: customerSpec.wednesday.from },
-    'wednesday.to': { $gte: customerSpec.wednesday.to },
-    'thursday.from': { $lte: customerSpec.thursday.from },
-    'thursday.to': { $gte: customerSpec.thursday.to },
-    'friday.from': { $lte: customerSpec.friday.from },
-    'friday.to': { $gte: customerSpec.friday.to },
-    'saturday.from': { $lte: customerSpec.saturday.from },
-    'saturday.to': { $gte: customerSpec.saturday.to },
-    'sunday.from': { $lte: customerSpec.sunday.from },
-    'sunday.to': { $gte: customerSpec.sunday.to },
+    active: true,
+    ...customerSpec,
   });
 
   res.status(200).json({
@@ -56,15 +53,55 @@ exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
 });
 
 // @route POST /availability/{sitterId}
+// @access Private
 exports.createAvailability = asyncHandler(async (req, res, next) => {
   const countActive = await Availability.count({ sitterId: req.params.sitterId , active: true });
-  if (countActive >= 1) {
+  if (countActive >= 1 && req.body.active) {
+    res.status(400);
+    throw new Error(
+      "More than one active availability records not allowed. Disable other availability records before proceeding"
+    );
+  }
+
+  const availability = await Availability.create({ ...req.body, sitterId: req.params.sitterId });
+  res.status(201).json({ success: { availability } });
+});
+
+
+// @route PUT /availability/{recordId}
+// @access Private
+exports.updateAvailability = asyncHandler(async (req, res, next) => {
+  const existing = await Availability.count({ _id: req.params.recordId });
+  if (existing == 0) {
+    res.status(404);
+    throw new Error(`Not found`);
+  }
+
+  const countActive = await Availability.count({ sitterId: req.body.sitterId , active: true });
+  if (countActive >= 1  && req.body.active) {
     res.status(400);
     throw new Error(
       "More than one active availability record not allowed. Disable other availability records before proceeding"
     );
   }
 
-  const availability = await Availability.create({ ...req.body, sitterId: req.params.sitterId });
-  res.status(201).json({ success: { availability } });
+  const updated = await Availability.findByIdAndUpdate(
+    req.params.recordId,
+    { ...req.body },
+    { new: true },
+  );
+  res.status(200).json({ success: { availability: updated } });
+});
+
+// @route DELETE /availability/{recordId}
+// @access Private
+exports.deleteAvailability = asyncHandler(async (req, res, next) => {
+  const existing = await Availability.count({ _id: req.params.recordId });
+  if (existing == 0) {
+    res.status(404);
+    throw new Error(`Not found`);
+  }
+
+  const updated = await Availability.findOneAndDelete(req.params.recordId);
+  res.status(201).send();
 });

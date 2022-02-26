@@ -13,6 +13,7 @@ exports.getAllBookings = asyncHandler(async (req, res, next) => {
 // @route POST /booking/book:id
 // @desc create a new booking
 exports.createBooking = asyncHandler(async (req, res, next) => {
+  const stripCustomer = null;
   const bookings = await Booking.find({ userId: req.params.id, sitterId: req.body.userId });
   if (bookings) {
     bookings.map((booking) => {
@@ -21,10 +22,11 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
         throw new Error('you already have a booking the coincides with this one');
       }
       const customer = await stripe.customers.retrieve(booking.customerId);
-      if (!customer) const stripCustomer = await stripe.createStripeCustomer(updatedBooking);
+      if (!customer) stripCustomer = await stripe.createStripeCustomer(booking);
     });
   }
-  const bookingInfo = { ...req.body, userId: req.params.id, customerId: stripCustomer.id };
+  const bookingInfo = { ...req.body, userId: req.params.id };
+  stripCustomer ? { ...bookingInfo, customerId: stripCustomer.id } : null;
   const booking = await Booking.create(bookingInfo);
   if (!booking) {
     res.status(500);

@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Notification = require('notification');
 
-// @route POST /notification/create
+// @route POST /notification/create:id
 // @desc create notification
 // @access Public
 exports.createNotification = asyncHandler(async (req, res, next) => {
@@ -16,7 +16,7 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
   res.json({ message: 'notification created', notification });
 });
 
-// @route PUT /notification/markAsRead
+// @route PUT /notification/markAsRead:id
 // @desc mark unread notification as read
 // @access Public
 exports.markAsRead = asyncHandler(async (req, res, next) => {
@@ -31,7 +31,7 @@ exports.markAsRead = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @route GET /notification/getAll
+// @route GET /notification/getAll:id
 // @desc get all notifications
 // @access Public
 exports.getAllNotifications = asyncHandler(async (req, res, next) => {
@@ -39,7 +39,7 @@ exports.getAllNotifications = asyncHandler(async (req, res, next) => {
   res.send(notifications);
 });
 
-// @route GET /notification/getAllUnread
+// @route GET /notification/getAllUnread:id
 // @desc get all unread notifications
 // @access Public
 exports.getAllUnreadNotifications = asyncHandler(async (req, res, next) => {

@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/User');
-const Profile = require('../models/Profile');
 const notificationContent = require('../templates/notificationTemplates');
 const onlineUsers = new Map();
 
@@ -36,7 +35,7 @@ const sock = (io) => {
       const sitterId = socket.handshake.sitterId;
       const cookie = socket.handshake.headers.cookie;
       const userId = getId(cookie);
-      const sitter = Profile.findById(sitterId);
+      const sitter = User.findById(sitterId);
       const user = User.findById(userId);
       const message = { ...notificationContent.get('requested'), description: `${user.name} requested a booking` };
       const sitterSocketId = onlineUsers.get(sitterId).socketId;

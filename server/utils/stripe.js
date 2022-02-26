@@ -14,15 +14,16 @@ exports.createStripeCustomer = async (booking) => {
 };
 
 exports.chargeCustomer = async (payment) => {
-  stripe.charges.create({
+  const charge = await stripe.charges.create({
     amount: payment.totalPayment,
     currency: CURRENCY,
     customer: payment.customerId,
   });
+  return charge;
 };
 
 exports.creatPaymentMethod = async (cardDetails) => {
-  await stripe.paymentMethods.create({
+  const paymentMethod = await stripe.paymentMethods.create({
     type: 'card',
     card: {
       number: cardDetails.number,
@@ -31,4 +32,18 @@ exports.creatPaymentMethod = async (cardDetails) => {
       cvc: cardDetails.cvc,
     },
   });
+  return paymentMethod;
+};
+
+exports.retrievePaymentMethod = async (id) => {
+  const paymentMethod = await stripe.paymentMethods.retrieve(id);
+  return paymentMethod;
+};
+
+exports.updatePaymentMethod = async (body) => {
+  const metaData = body.metaData;
+  const paymentMethod = await stripe.paymentMethods.update(
+    body.id,
+    { metadata: { metadata } }
+  );
 };

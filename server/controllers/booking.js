@@ -24,7 +24,7 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
       if (!customer) const stripCustomer = await stripe.createStripeCustomer(updatedBooking);
     });
   }
-  const bookingInfo = { ...req.body, userId: req.params.id };
+  const bookingInfo = { ...req.body, userId: req.params.id, customerId: stripCustomer.id };
   const booking = await Booking.create(bookingInfo);
   if (!booking) {
     res.status(500);

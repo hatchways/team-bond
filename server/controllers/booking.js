@@ -22,7 +22,9 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
         throw new Error('you already have a booking the coincides with this one');
       }
       const customer = await stripe.customers.retrieve(booking.customerId);
-      if (!customer) stripCustomer = await stripe.createStripeCustomer(booking);
+      if (!customer) {
+        stripCustomer = await stripe.createStripeCustomer(booking);
+      } else stripCustomer = customer;
     });
   }
   const bookingInfo = { ...req.body, userId: req.params.id };

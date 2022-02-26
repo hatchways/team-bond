@@ -19,16 +19,17 @@ const sock = (io) => {
       const id = getId(cookie);
       const user = await User.findById(id);
       if (user) {
+        console.log(`${user.name} is authenticated and connected`);
         onlineUsers.set(id, { ...user._doc, socketId: socket.id });
         return onlineUsers;
       }
     });
-    console.log("connected");
     socket.on('logout', async () => {
       const cookie = socket.handshake.headers.cookie;
       const id = getId(cookie);
       const user = await User.findById(id);
       onlineUsers.delete(id);
+      console.log(`user ${user.name} has logged out`);
       return onlineUsers;
     });
     socket.on('requested', async () => {

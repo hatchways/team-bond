@@ -20,6 +20,8 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
         res.status(500);
         throw new Error('you already have a booking the coincides with this one');
       }
+      const customer = await stripe.customers.retrieve(booking.customerId);
+      if (!customer) const stripCustomer = await stripe.createStripeCustomer(updatedBooking);
     });
   }
   const bookingInfo = { ...req.body, userId: req.params.id };
@@ -41,7 +43,7 @@ exports.acceptOrDecline = asyncHandler(async (req, res, next) => {
   const booking = await Booking.findById(req.params.id);
   if (!booking) {
     res.status(500);
-    throw new Error('No profile found');
+    throw new Error('No booking found');
   }
   const hoursOfService = () => {
     const startDate = new Date(booking.start);
@@ -52,15 +54,14 @@ exports.acceptOrDecline = asyncHandler(async (req, res, next) => {
   };
   const updatedBooking = booking.updateOne(req.body);
   if (updatedBooking.accepted) {
-    const stripCustomer = await stripe.createStripeCustomer(updatedBooking);
     const payment = await Payment.create({
       userId: updatedBooking.userId,
       sitterId: updatedBooking.sitterId,
       rate: updatedBooking.rate,
       hoursOfService: hoursOfService(),
-      customerId: stripCustomer.id
+      customerId: booking.customerId
     });
-    await stripe.chargeCustomer(stripCustomer.id, updatedBooking, payment);
+    await stripe.chargeCustomer(payment);
     res.json({ message: 'Booking accepted', updatedBooking });
   } else {
     res.json({ message: 'Booking declined', updatedBooking });

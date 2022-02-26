@@ -13,11 +13,10 @@ exports.createStripeCustomer = async (booking) => {
   return customer;
 };
 
-exports.chargeCustomer = async (id, booking, payment) => {
-  const sitterProfile = await Profile.findById(booking.sitterId);
+exports.chargeCustomer = async (payment) => {
   stripe.charges.create({
     amount: payment.totalPayment,
     currency: CURRENCY,
-    customer: id,
+    customer: payment.customerId,
   });
 };

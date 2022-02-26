@@ -20,3 +20,15 @@ exports.chargeCustomer = async (payment) => {
     customer: payment.customerId,
   });
 };
+
+exports.creatPaymentMethod = async (cardDetails) => {
+  await stripe.paymentMethods.create({
+    type: 'card',
+    card: {
+      number: cardDetails.number,
+      exp_month: cardDetails.expMonth,
+      exp_year: cardDetails.expYear,
+      cvc: cardDetails.cvc,
+    },
+  });
+};

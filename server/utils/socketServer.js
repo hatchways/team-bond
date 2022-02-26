@@ -40,7 +40,7 @@ const sock = (io) => {
       const user = User.findById(userId);
       const message = { ...notificationContent.get('requested'), description: `${user.name} requested a booking` };
       const sitterSocketId = onlineUsers.get(sitterId).socketId;
-      io.to(sitterSocketId).emit(message);
+      sitterSocketId ? io.to(sitterSocketId).emit(message) : null;
     });
   });
 };

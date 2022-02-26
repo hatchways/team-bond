@@ -1,7 +1,7 @@
 const Booking = require('../models/Booking');
+const Payment = require('../models/Payment');
+const stripe = require('../utils/stripe');
 const asyncHandler = require('express-async-handler');
-
-
 
 // @route GET /bookings
 // @desc get all bookings of the sitter who is logged in
@@ -10,7 +10,7 @@ exports.getAllBookings = asyncHandler(async (req, res, next) => {
   res.send(bookings);
 });
 
-// @route POST /booking/book
+// @route POST /booking/book:id
 // @desc create a new booking
 exports.createBooking = asyncHandler(async (req, res, next) => {
   const bookings = await Booking.find({ userId: req.params.id, sitterId: req.body.userId });
@@ -35,7 +35,7 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @route PUT /booking/acceptOrDecline
+// @route PUT /booking/acceptOrDecline:id
 // @desc updates booking to accepted or declined by sitter
 exports.acceptOrDecline = asyncHandler(async (req, res, next) => {
   const booking = await Booking.findById(req.params.id);
@@ -43,13 +43,32 @@ exports.acceptOrDecline = asyncHandler(async (req, res, next) => {
     res.status(500);
     throw new Error('No profile found');
   }
+  const hoursOfService = () => {
+    const startDate = new Date(booking.start);
+    const endDate = new Date(booking.end);
+    const diff = Math.abs(startDate - endDate);
+    const hours = diff / 36e5;
+    return hours;
+  };
   const updatedBooking = booking.updateOne(req.body);
-  updatedBooking.accepted
-    ? res.json({ message: 'Booking accepted', updatedBooking })
-    : res.json({ message: 'Booking declined', updatedBooking });
+  if (updatedBooking.accepted) {
+    const stripCustomer = await stripe.createStripeCustomer(updatedBooking);
+    const payment = await Payment.create({
+      userId: updatedBooking.userId,
+      sitterId: updatedBooking.sitterId,
+      rate: updatedBooking.rate,
+      hoursOfService: hoursOfService(),
+      customerId: stripCustomer.id
+    });
+    await stripe.chargeCustomer(stripCustomer.id, updatedBooking, payment);
+    res.json({ message: 'Booking accepted', updatedBooking });
+  } else {
+    res.json({ message: 'Booking declined', updatedBooking });
+  };
+
 });
 
-// @route PUT /booking/update
+// @route PUT /booking/update:id
 // @desc update booking by client and reset the updated booking to pending
 exports.updateBooking = asyncHandler(async (req, res, next) => {
   const booking = await Booking.findById(req.params.id);

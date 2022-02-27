@@ -35,9 +35,35 @@ const sock = (io) => {
       const sitterId = socket.handshake.sitterId;
       const cookie = socket.handshake.headers.cookie;
       const userId = getId(cookie);
-      const sitter = User.findById(sitterId);
       const user = User.findById(userId);
       const message = { ...notificationContent.get('requested'), description: `${user.name} requested a booking` };
+      const sitterSocketId = onlineUsers.get(sitterId).socketId;
+      sitterSocketId ? io.to(sitterSocketId).emit(message) : null;
+    });
+    socket.on('accepted', async () => {
+      const userId = socket.handshake.userId;
+      const cookie = socket.handshake.headers.cookie;
+      const sitterId = getId(cookie);
+      const sitter = User.findById(sitterId);
+      const message = { ...notificationContent.get('accepted'), description: `${sitter.name} accepted your booking` };
+      const userSocketId = onlineUsers.get(userId).socketId;
+      userSocketId ? io.to(userSocketId).emit(message) : null;
+    });
+    socket.on('declined', async () => {
+      const userId = socket.handshake.userId;
+      const cookie = socket.handshake.headers.cookie;
+      const sitterId = getId(cookie);
+      const sitter = User.findById(sitterId);
+      const message = { ...notificationContent.get('declined'), description: `${sitter.name} declined your booking` };
+      const userSocketId = onlineUsers.get(userId).socketId;
+      userSocketId ? io.to(userSocketId).emit(message) : null;
+    });
+    socket.on('payed', async () => {
+      const sitterId = socket.handshake.sitterId;
+      const cookie = socket.handshake.headers.cookie;
+      const userId = getId(cookie);
+      const user = User.findById(userId);
+      const message = { ...notificationContent.get('declined'), description: `${user.name} declined your booking` };
       const sitterSocketId = onlineUsers.get(sitterId).socketId;
       sitterSocketId ? io.to(sitterSocketId).emit(message) : null;
     });

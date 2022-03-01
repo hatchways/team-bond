@@ -2,6 +2,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECERT);
 const Profile = require('../models/Profile');
 const User = require('../models/User');
 
+const CURRENCY = 'usd';
+
 
 exports.createStripeCustomer = async (booking) => {
   const user = await User.findById(booking.userId);
@@ -44,6 +46,7 @@ exports.updatePaymentMethod = async (body) => {
   const metaData = body.metaData;
   const paymentMethod = await stripe.paymentMethods.update(
     body.id,
-    { metadata: { metadata } }
+    { metadata: { metaData } }
   );
+  return paymentMethod;
 };

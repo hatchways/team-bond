@@ -6,7 +6,7 @@ const asyncHandler = require("express-async-handler");
 // @desc create payment method
 // @access Public
 exports.createPaymentMethod = asyncHandler(async (req, res, next) => {
-  paymentMethod = stripe.createPaymentMethod(req.body);
+  const paymentMethod = stripe.createPaymentMethod(req.body);
   if (!paymentMethod) throw new Error("PaymentMethod not created");
   res.json({ message: 'Payment Method Created', paymentMethod });
 });

@@ -115,3 +115,32 @@ exports.loadProfile = asyncHandler(async (req, res, next) => {
     },
   });
 });
+
+// @route GET /profile/1
+// @desc Get public profile data by id
+// @access Public
+exports.getProfile = asyncHandler(async (req, res, next) => {
+  const searchableId = req.params.id;
+  let profile;
+  try {
+    profile = await Profile.findById({ _id: searchableId }, "name description photo");
+    if (!profile) {
+      res.status(404).json({
+        error: {
+          message: `Profile with id ${searchableId} doesn't exist`
+        }
+      });
+    }
+    
+    if (profile) {
+      res.status(200).json({
+        success: {
+          profile
+        }
+      });
+    }
+  } catch {
+    res.status(500);
+    throw new Error("Internal Server Error");
+  }
+});

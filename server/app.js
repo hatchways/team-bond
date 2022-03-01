@@ -28,7 +28,7 @@ const io = new Server(server, {
   },
 });
 
-//require('./utils/socketServer')(io);
+require('./utils/socketServer')(io);
 
 
 if (process.env.NODE_ENV === 'development') {

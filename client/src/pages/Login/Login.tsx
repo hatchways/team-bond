@@ -24,6 +24,7 @@ export default function Login(): JSX.Element {
       } else if (data.success) {
         socket ? socket.emit('authenticate') : null;
         updateLoginContext(data.success);
+        socket?.emit('authenticate');
       } else {
         // should not get here from backend but this catch is for an unknown issue
         console.error({ data });

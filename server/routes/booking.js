@@ -8,9 +8,9 @@ const {
   updateBooking,
 } = require('../controllers/booking');
 
-router.route('./').get(protect, getAllBookings);
-router.route('./book').post(protect, createBooking);
-router.route('./acceptOrDecline').put(protect, acceptOrDecline);
-router.route('./update').put(protect, updateBooking);
+router.route('./:id').get(protect, getAllBookings);
+router.route('./book:id').post(protect, createBooking);
+router.route('./acceptOrDecline:id').put(protect, acceptOrDecline);
+router.route('./update:id').put(protect, updateBooking);
 
 module.exports = router;

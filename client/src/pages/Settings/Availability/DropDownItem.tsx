@@ -20,7 +20,7 @@ const DropDownItem: React.FC = () => {
         initialValues={{
           schedules: new Map<string, { [key: string]: any }>(),
           scheduleType: '',
-          days: [],
+          days: {},
         }}
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);

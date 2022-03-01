@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Profile = required('./Profile.js');
+const Profile = require('./Profile.js');
 
-const Payment = new mongoose.Schema({
+const paymentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -15,7 +15,7 @@ const Payment = new mongoose.Schema({
   rate: {
     type: Number,
     required: true,
-    set: function () {
+    set: async function () {
       const sitterProfile = await Profile.findById(this.sitterId);
       return sitterProfile.rate;
     }

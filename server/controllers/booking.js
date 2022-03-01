@@ -66,7 +66,6 @@ exports.acceptOrDecline = asyncHandler(async (req, res, next) => {
       customerId: booking.customerId
     });
     const charge = await stripe.chargeCustomer(payment);
-
     res.json({ message: 'Booking accepted', updatedBooking, charge });
   } else {
     res.json({ message: 'Booking declined', updatedBooking });

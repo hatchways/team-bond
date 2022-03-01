@@ -74,7 +74,7 @@ const BookingForm = ({ loggedInUser, profile, sitterId }: Props) => {
       <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start">
         <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start">
           <Grid item sx={{ marginBottom: '25px' }}>
-            <Typography variant="subtitle1">Book now</Typography>
+            <Typography variant="subtitle1">Book now, {profile.name}</Typography>
           </Grid>
 
           <Formik

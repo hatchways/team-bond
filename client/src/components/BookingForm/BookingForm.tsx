@@ -5,6 +5,7 @@ import { makeStyles } from '@mui/styles';
 import { Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import { useSocket } from '../../context/useSocketContext';
 import createBooking from '../../helpers/APICalls/createBooking';
 import { IBooking } from '../../interface/Booking';
 import { Profile } from '../../interface/Profile';
@@ -32,16 +33,18 @@ const BookingForm = ({ loggedInUser, profile, sitterId }: Props) => {
   });
   const { updateSnackBarMessage } = useSnackBar();
   const classes = useStyles();
-
+  const { socket } = useSocket();
   const handleSubmit = (values: IBooking, { setSubmitting }: FormikHelpers<IBooking>) => {
     console.log(values, 'values');
-
     createBooking(values).then((data) => {
       if (data.error) {
         console.error({ error: data.error.message });
         setSubmitting(false);
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
+        socket?.emit('requested', {
+          sitterId: sitterId,
+        });
         setSubmitting(false);
         updateSnackBarMessage('Booking submitted!');
       } else {

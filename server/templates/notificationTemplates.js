@@ -2,7 +2,7 @@ const notificationContent = new Map();
 
 const bookingRequested = {
   title: 'Booking requested',
-  description:'',
+  description: '',
   read: false,
   date: new Date(),
 };

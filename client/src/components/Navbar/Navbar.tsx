@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/useAuthContext';
+import { useSocket } from '../../context/useSocketContext';
 import {
   Button,
   Divider,
@@ -96,6 +97,7 @@ const Navbar: React.FC = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { loggedInUser, logout } = useAuth();
+  const { socket } = useSocket();
   const open = Boolean(anchorEl);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -107,6 +109,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleLogout = () => {
+    socket ? socket.emit('logout') : null;
     handleClose();
     logout();
   };

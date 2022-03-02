@@ -73,4 +73,4 @@ const sitterSchema = Profile.discriminator(
 
 
 
-module.exports = Profile;
+module.exports = Profile, sitterSchema;

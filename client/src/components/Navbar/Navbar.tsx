@@ -31,8 +31,8 @@ const menuItems = [
     authenticated: true,
   },
   {
-    item: 'Become a sitter',
-    resource: '/signup?accountType=pet_sitter',
+    item: 'Become a Sitter',
+    resource: '/signup?accountType=petSitter', 
     canView: null,
     authenticated: false,
   },

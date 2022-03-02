@@ -9,7 +9,7 @@ const DropDownItem: React.FC = () => {
   for (let i = 0; i < 25; i++) {
     i < 10
       ? options.push({ value: `0${i}:00`, label: `0${i}:00` })
-      : options.push({ value: `${i}:00`, label: `${i}:00` });
+      : options.push({ value: `0${i}:00`, label: `${i}:00` });
   }
   return (
     <div>
@@ -20,22 +20,34 @@ const DropDownItem: React.FC = () => {
         initialValues={{
           schedules: new Map<string, { [key: string]: any }>(),
           scheduleType: '',
-          days: {},
+          days: [],
         }}
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);
-          console.log(values);
+          console.log(values); // APICall from helper goes here
           setSubmitting(false);
         }}
       >
-        {({ initialValues, values, isSubmitting, resetForm, setFieldValue }) => {
+        {({ initialValues, values, isSubmitting, resetForm, setFieldValue, handleSubmit }) => {
           return (
             <>
               <Form
                 onClick={() => {
+                  const dayArr = values.days;
+                  const daysAvailabilty = dayArr.map((day) => {
+                    const from = `${day}From`;
+                    const to = `${day}To`;
+                    return {
+                      [day]: {
+                        From: (values as any)[from] || '00:00',
+                        To: (values as any)[to] || '00:00',
+                      },
+                    };
+                  });
                   values.scheduleType
-                    ? setFieldValue('schedules', { [values.scheduleType]: { days: [(values as any).days] } })
+                    ? setFieldValue('schedules', { [(values as any).scheduleType]: daysAvailabilty })
                     : null;
+                  handleSubmit();
                 }}
               >
                 <Field
@@ -85,7 +97,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>from</span>
                           <Field
                             disabled={(values as any).days.includes('sunday') ? '' : 'Disabled'}
-                            name="sun-from"
+                            name="sundayFrom"
                             component="select"
                           >
                             {options.map((option) => {
@@ -99,7 +111,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>to</span>
                           <Field
                             disabled={(values as any).days.includes('sunday') ? '' : 'Disabled'}
-                            name="sun-to"
+                            name="sundayTo"
                             component="select"
                           >
                             {options.map((option) => {
@@ -123,7 +135,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>from</span>
                           <Field
                             disabled={(values as any).days.includes('monday') ? '' : 'Disabled'}
-                            name="mon-from"
+                            name="mondayFrom"
                             component="select"
                           >
                             {options.map((option) => {
@@ -137,7 +149,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>to</span>
                           <Field
                             disabled={(values as any).days.includes('monday') ? '' : 'Disabled'}
-                            name="mon-to"
+                            name="mondayTo"
                             component="select"
                           >
                             {options.map((option) => {
@@ -161,7 +173,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>from</span>
                           <Field
                             disabled={(values as any).days.includes('tuesday') ? '' : 'Disabled'}
-                            name="tue-from"
+                            name="tuesdayFrom"
                             component="select"
                           >
                             {options.map((option) => {
@@ -175,7 +187,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>to</span>
                           <Field
                             disabled={(values as any).days.includes('tuesday') ? '' : 'Disabled'}
-                            name="tue-to"
+                            name="tuesdayTo"
                             component="select"
                           >
                             {options.map((option) => {
@@ -199,7 +211,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>from</span>
                           <Field
                             disabled={(values as any).days.includes('wednesday') ? '' : 'Disabled'}
-                            name="wed-from"
+                            name="wednesdayFrom"
                             component="select"
                           >
                             {options.map((option) => {
@@ -213,7 +225,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>to</span>
                           <Field
                             disabled={(values as any).days.includes('wednesday') ? '' : 'Disabled'}
-                            name="wed-to"
+                            name="wednesdayTo"
                             component="select"
                           >
                             {options.map((option) => {
@@ -237,7 +249,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>from</span>
                           <Field
                             disabled={(values as any).days.includes('thursday') ? '' : 'Disabled'}
-                            name="thur-from"
+                            name="thursdayFrom"
                             component="select"
                           >
                             {options.map((option) => {
@@ -251,7 +263,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>to</span>
                           <Field
                             disabled={(values as any).days.includes('thursday') ? '' : 'Disabled'}
-                            name="thur-to"
+                            name="thursadyTo"
                             component="select"
                           >
                             {options.map((option) => {
@@ -275,7 +287,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>from</span>
                           <Field
                             disabled={(values as any).days.includes('friday') ? '' : 'Disabled'}
-                            name="fri-from"
+                            name="fridayFrom"
                             component="select"
                           >
                             {options.map((option) => {
@@ -289,7 +301,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>to</span>
                           <Field
                             disabled={(values as any).days.includes('friday') ? '' : 'Disabled'}
-                            name="fri-to"
+                            name="fridayTo"
                             component="select"
                           >
                             {options.map((option) => {
@@ -313,7 +325,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>from</span>
                           <Field
                             disabled={(values as any).days.includes('saturday') ? '' : 'Disabled'}
-                            name="sat-from"
+                            name="saturdayFrom"
                             component="select"
                           >
                             {options.map((option) => {
@@ -327,7 +339,7 @@ const DropDownItem: React.FC = () => {
                           <span style={{ textTransform: 'uppercase' }}>to</span>
                           <Field
                             disabled={(values as any).days.includes('saturday') ? '' : 'Disabled'}
-                            name="sat-to"
+                            name="saturdayTo"
                             component="select"
                           >
                             {options.map((option) => {

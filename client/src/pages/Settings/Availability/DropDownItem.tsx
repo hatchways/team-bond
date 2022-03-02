@@ -24,11 +24,11 @@ const DropDownItem: React.FC = () => {
         }}
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);
-          console.log(values); // APICall from helper goes here
+          console.log(values.schedules); // APICall from helper goes here
           setSubmitting(false);
         }}
       >
-        {({ initialValues, values, isSubmitting, resetForm, setFieldValue, handleSubmit }) => {
+        {({ values, setFieldValue, handleSubmit }) => {
           return (
             <>
               <Form

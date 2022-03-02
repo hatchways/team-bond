@@ -1,11 +1,10 @@
-import { Divider, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
-import React from 'react';
+import { List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { start } from 'repl';
 import { IBooking } from '../../../interface/Booking';
 
 interface Props {
   filter: 'CURRENT' | 'PAST_DUE' | 'PAID';
+  onClick?: (bookingId: string) => void;
 }
 
 const today = new Date();
@@ -25,7 +24,7 @@ const demoBookings: IBooking[] = [
     declined: false,
     paid: true,
     pending: false,
-    _id: 'asdfasdf',
+    _id: 'booking1',
   },
   // CURRENT
   {
@@ -37,7 +36,7 @@ const demoBookings: IBooking[] = [
     declined: false,
     paid: false,
     pending: false,
-    _id: 'asdfasdf',
+    _id: 'booking2',
   },
   // PAST_DUE
   {
@@ -49,7 +48,7 @@ const demoBookings: IBooking[] = [
     declined: false,
     paid: false,
     pending: false,
-    _id: 'asdfasdf',
+    _id: 'booking3',
   },
 ];
 
@@ -73,27 +72,40 @@ const filterBookings = (filter: string, bookings: IBooking[]): IBooking[] => {
   return result;
 };
 
-const CustomerBookingList = ({ filter }: Props) => {
-  const [bookings, setBookings] = useState<IBooking[]>(filterBookings(filter, [...demoBookings]));
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const CustomerBookingList = ({ filter, onClick = () => {} }: Props) => {
+  const [bookings, setBookings] = useState<IBooking[]>([]);
+
+  useEffect(() => {
+    // fetch
+    setBookings(filterBookings(filter, [...demoBookings]));
+  }, [filter]);
+
+  const handleClick = (bookingId: string) => {
+    console.log(bookingId);
+    onClick(bookingId);
+  };
 
   return (
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {bookings.map((booking) => (
-        <>
-          <ListItem key={booking._id} alignItems="flex-start">
-            <ListItemButton>
-              <ListItemText
-                primary={booking.userId} // should be sitter name
-                secondary={
-                  booking.start?.toLocaleDateString('en-us', componentDateFormat) +
-                  ' - ' +
-                  booking.end?.toLocaleDateString('en-us', componentDateFormat)
-                }
-              />
-            </ListItemButton>
-          </ListItem>
-          <Divider />
-        </>
+        <ListItem key={booking._id} alignItems="flex-start" divider={true} disablePadding={true}>
+          <ListItemButton onClick={() => handleClick(booking._id!)}>
+            <ListItemText
+              primary={
+                // ! TODO should be sitter name when integrting
+                <Typography variant="subtitle1" component="div">
+                  {booking.userId}
+                </Typography>
+              }
+              secondary={
+                booking.start?.toLocaleDateString('en-us', componentDateFormat) +
+                ' - ' +
+                booking.end?.toLocaleDateString('en-us', componentDateFormat)
+              }
+            />
+          </ListItemButton>
+        </ListItem>
       ))}
     </List>
   );

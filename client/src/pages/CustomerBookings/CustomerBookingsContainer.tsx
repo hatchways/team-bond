@@ -5,10 +5,11 @@ import PageContainer from '../../components/PageContainer/PageContainer';
 import CustomerBookingList from './CustomerBookingsList/CustomerBookingList';
 
 const CustomerBookingsContainer = () => {
-  const [value, setValue] = useState('1');
+  const [tabIndex, setTabIndex] = useState<string>('1');
+  const [selectedBookingId, setSelectedBookingId] = useState<string>('');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+    setTabIndex(newValue);
   };
 
   return (
@@ -27,24 +28,24 @@ const CustomerBookingsContainer = () => {
               elevation={1}
             >
               <Box sx={{ width: '100%' }}>
-                <TabContext value={value}>
+                <TabContext value={tabIndex}>
                   <Box
                     sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-around' }}
                   >
-                    <Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="auto">
+                    <Tabs value={tabIndex} onChange={handleChange} variant="scrollable" scrollButtons="auto">
                       <Tab label="Current" value="1" />
                       <Tab label="Past-Due" value="2" />
                       <Tab label="Paid" value="3" />
                     </Tabs>
                   </Box>
                   <TabPanel value="1">
-                    <CustomerBookingList filter="CURRENT" />
+                    <CustomerBookingList filter="CURRENT" onClick={setSelectedBookingId} />
                   </TabPanel>
                   <TabPanel value="2">
-                    <CustomerBookingList filter="PAST_DUE" />
+                    <CustomerBookingList filter="PAST_DUE" onClick={setSelectedBookingId} />
                   </TabPanel>
                   <TabPanel value="3">
-                    <CustomerBookingList filter="PAID" />
+                    <CustomerBookingList filter="PAID" onClick={setSelectedBookingId} />
                   </TabPanel>
                 </TabContext>
               </Box>
@@ -60,7 +61,9 @@ const CustomerBookingsContainer = () => {
                 marginBottom: '20px',
               }}
               elevation={1}
-            ></Card>
+            >
+              {selectedBookingId}
+            </Card>
           </Grid>
         </Grid>
       </Container>

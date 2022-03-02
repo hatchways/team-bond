@@ -16,7 +16,7 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
   const stripCustomer = null;
   const bookings = await Booking.find({ userId: req.params.id, sitterId: req.body.userId });
   if (bookings) {
-    bookings.map((booking) => {
+    bookings.map(async (booking) => {
       if (booking.start === req.body.start || booking.end === req.body.end) {
         res.status(500);
         throw new Error('you already have a booking the coincides with this one');

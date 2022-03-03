@@ -56,10 +56,15 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     });
   } else if(user && accountType == "petSitter") {
     await sitterSchema.create({
+      kind: "Sitter",
       userId: user._id,
-      name
+      name,
+      stripeConnectId,
+      availabilityId,
+      actiiveScheduleId,
+      requests,
+      rate
     });
-    console.log("sitter created.")
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
 

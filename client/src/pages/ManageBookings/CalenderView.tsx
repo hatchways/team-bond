@@ -6,12 +6,6 @@ import {format, isSameMonth, isSameDay, addMonths, subMonths} from 'date-fns'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-
-// const minDate = new Date('2020-01-01T00:00:00.000');
-// const maxDate = new Date('2034-01-01T00:00:00.000');
-
-
-
 const CalenderView = () => {
     const classes = useStyles();
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -19,23 +13,20 @@ const CalenderView = () => {
 
     function dayColor(day:Date){
       if(!isSameMonth(day, selectedDate)) return '#CCCCCC';
-      if(isSameDay(day, selectedDate)) return '#FFFFFF';
+      // if(isSameDay(day, selectedDate)) return '#FFFFFF';
       return '#000000';
     }
-
     function dayBGColor(day:Date){
       if(!isSameMonth(day, selectedDate)) return '#FFFFFF';
-      if(isSameDay(day, selectedDate)) return '#f14140';
+      // if(isSameDay(day, selectedDate)) return '#f14140';
       return '#FFFFFF';
     }
     function nextMonth(){
       setSelectedDate(addMonths(selectedDate,1))
     };
-
     function prevMonth(){
       setSelectedDate(subMonths(selectedDate,1))
     }
-    
     return (
             <Grid container sx={{paddingLeft:10}} >
                 <Paper sx={{width: 550, height: 400, display: "flex", flexDirection:"column"}}>
@@ -55,9 +46,7 @@ const CalenderView = () => {
                       {format(selectedDate, "yyyy")}
                     </Grid>
                   </Grid>
-                  
                   <Grid container columns={7} sx ={{height:200}}> 
-
                     {data.map((week) =>(
                       <Grid item container
                         columns={1}
@@ -76,16 +65,8 @@ const CalenderView = () => {
                         </Grid>
                   ))}
                   </Grid>
-                
-
                 </Paper>
-
-              
-              
-              
-
             </Grid>
-            
     );
 };
 

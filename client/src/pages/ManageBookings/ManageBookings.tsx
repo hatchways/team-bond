@@ -12,12 +12,11 @@ const ManageBookings = () => {
     return (
         <Container>
             <Grid container> 
-                <Grid columns={1} justifyContent="flex-start" className={classes.GridTop}>
+                <Grid columns={1} justifyContent="flex-start" className={classes.gridTop}>
                     <NextBooking/>
-                    {/* <CurrentBookings/> */}
                 </Grid>
                 
-                <Grid justifyContent="flex-end" className={classes.GridTop}>
+                <Grid justifyContent="flex-end" className={classes.gridTop}>
                     <CalenderView/>
                 </Grid>
             </Grid>

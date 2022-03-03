@@ -3,13 +3,13 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => {
     return{
-        GridTop:{
+        gridTop:{
             paddingTop: theme.spacing(6)
         },
         Avatar:{
             float: "left"
         },
-        CalenderWeek:{
+        calenderWeek:{
             paddingLeft: theme.spacing(1)
             
         }

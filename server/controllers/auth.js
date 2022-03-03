@@ -9,7 +9,7 @@ const sitterSchema = require("../models/Profile");
 // @access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
-  const accountType = req.query.accountType; //changed hre
+  const accountType = req.query.accountType; 
 
   const emailExists = await User.findOne({ email });
 
@@ -31,30 +31,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     password
   });
 
-  if (user && acountType != "petSitter") {
-    await Profile.create({
-      userId: user._id,
-      name
-    });
-
-    const token = generateToken(user._id);
-    const secondsInWeek = 604800;
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: secondsInWeek * 1000
-    });
-
-    res.status(201).json({
-      success: {
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email
-        }
-      }
-    });
-  } else if(user && accountType == "petSitter") {
+ if(user && accountType == "petSitter") {
     await sitterSchema.create({
       kind: "Sitter",
       userId: user._id,
@@ -82,9 +59,33 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         }
       }
     });
-  }else{
+  }else if(!user){
     res.status(400);
     throw new Error("Invalid user data");
+  }
+  else{
+    await Profile.create({
+      userId: user._id,
+      name
+    });
+
+    const token = generateToken(user._id);
+    const secondsInWeek = 604800;
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: secondsInWeek * 1000
+    });
+
+    res.status(201).json({
+      success: {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        }
+      }
+    });
   }
 
 });

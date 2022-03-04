@@ -44,13 +44,13 @@ const ProfileListings = (): JSX.Element => {
     );
   });
   return (
-    <div>
+    <Box>
       <Navbar />
       <ProfileSearch />
       <Grid container spacing={2} alignItems="center" marginTop={10} justifyContent="space-even">
         {allProfiles}
       </Grid>
-    </div>
+    </Box>
   );
 };
 

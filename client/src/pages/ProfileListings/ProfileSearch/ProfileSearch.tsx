@@ -15,7 +15,7 @@ const ProfileSearch = (): JSX.Element => {
   };
 
   return (
-    <div>
+    <Box>
       <Grid container marginTop={3}>
         <Grid item sm={12}>
           <Typography align="center" variant="h2" style={{ fontWeight: 600 }}>
@@ -39,7 +39,7 @@ const ProfileSearch = (): JSX.Element => {
           </Grid>
         </Grid>
       </Box>
-    </div>
+    </Box>
   );
 };
 

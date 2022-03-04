@@ -13,8 +13,12 @@ export const theme = createTheme({
       fontWeight: 700,
     },
     subtitle1: {
-      fontWeight: 500,
+      fontWeight: 600,
       fontSize: '1.5rem',
+    },
+    subtitle2: {
+      fontWeight: 500,
+      fontSize: '1.1rem',
     },
   },
 });

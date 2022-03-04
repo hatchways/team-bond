@@ -4,7 +4,7 @@ import { IBooking } from '../../../interface/Booking';
 
 interface Props {
   filter: 'CURRENT' | 'PAST_DUE' | 'PAID';
-  onClick?: (bookingId: string) => void;
+  onClick?: (sitterId: string, selectedFilter: string) => void;
 }
 
 const today = new Date();
@@ -17,7 +17,7 @@ const demoBookings: IBooking[] = [
   // PAID
   {
     userId: 'asdfasdfasdfasdf',
-    sitterId: 'sfgsfdgsfdg',
+    sitterId: 'sitter1',
     start: new Date(2022, 1, 1),
     end: new Date(2022, 1, 2),
     accepted: true,
@@ -29,7 +29,7 @@ const demoBookings: IBooking[] = [
   // CURRENT
   {
     userId: 'asdfasdfasdfasdf',
-    sitterId: 'sfgsfdgsfdg',
+    sitterId: 'sitter2',
     start: new Date(today.getFullYear(), today.getMonth() + 3, 1),
     end: new Date(today.getFullYear(), today.getMonth() + 3, 27),
     accepted: true,
@@ -41,7 +41,7 @@ const demoBookings: IBooking[] = [
   // PAST_DUE
   {
     userId: 'asdfasdfasdfasdf',
-    sitterId: 'sfgsfdgsfdg',
+    sitterId: 'sitter3',
     start: new Date(2022, 1, 1),
     end: new Date(2022, 1, 2),
     accepted: true,
@@ -81,19 +81,18 @@ const CustomerBookingList = ({ filter, onClick = () => {} }: Props) => {
     setBookings(filterBookings(filter, [...demoBookings]));
   }, [filter]);
 
-  const handleClick = (bookingId: string) => {
-    console.log(bookingId);
-    onClick(bookingId);
+  const handleClick = (sitterId: string) => {
+    onClick(sitterId, filter);
   };
 
   return (
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {bookings.map((booking) => (
         <ListItem key={booking._id} alignItems="flex-start" divider={true} disablePadding={true}>
-          <ListItemButton onClick={() => handleClick(booking._id!)}>
+          <ListItemButton onClick={() => handleClick(booking.sitterId)}>
             <ListItemText
               primary={
-                // ! TODO should be sitter name when integrting
+                // ! TODO should be sitter name when integrating
                 <Typography variant="subtitle1" component="div">
                   {booking.userId}
                 </Typography>

@@ -49,12 +49,12 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             id="email"
             label="Email Address"
             fullWidth
-            margin="normal"
+            //margin="normal"
             name="email"
             placeholder="Your email"
             autoComplete="email"
             autoFocus
-            helperText={touched.email ? errors.email : ''}
+            helpertext={touched.email ? errors.email : ''}
             error={touched.email && Boolean(errors.email)}
             value={values.email}
             onChange={handleChange}
@@ -64,12 +64,12 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             id="password"
             label="Password"
             fullWidth
-            margin="normal"
+            //margin="normal"
             type="password"
             name="password"
             placeholder="Your password"
             autoComplete="current-password"
-            helperText={touched.password ? errors.password : ''}
+            helpertext={touched.password ? errors.password : ''}
             error={touched.password && Boolean(errors.password)}
             value={values.password}
             onChange={handleChange}

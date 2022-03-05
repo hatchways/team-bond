@@ -85,6 +85,9 @@ export default function Settings(): JSX.Element {
             <Route exact path="/profile/settings">
               <Redirect to="/profile/settings/edit-profile" />
             </Route>
+            <Route exact path="/profile/settings">
+              <Redirect to="/profile/settings/availabilty" />
+            </Route>
             <SettingsWrapper>
               {settingsMenu.map((item) => (
                 <Route

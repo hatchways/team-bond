@@ -54,11 +54,11 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             id="email"
             label="Email address"
             fullWidth
-            margin="normal"
+            //margin="normal"
             name="email"
             placeholder="Your email"
             autoComplete="email"
-            helperText={touched.email ? errors.email : ''}
+            helpertext={touched.email ? errors.email : ''}
             error={touched.email && Boolean(errors.email)}
             value={values.email}
             onChange={handleChange}
@@ -68,12 +68,12 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             id="name"
             label="Name"
             fullWidth
-            margin="normal"
+            //margin="normal"
             name="name"
             placeholder="Your name"
             autoComplete="name"
             autoFocus
-            helperText={touched.name ? errors.name : ''}
+            t={touched.name ? errors.name : ''}
             error={touched.name && Boolean(errors.name)}
             value={values.name}
             onChange={handleChange}
@@ -83,11 +83,11 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             id="password"
             label="Password"
             fullWidth
-            margin="normal"
+            //margin="normal"
             type="password"
             placeholder="Create a password"
             autoComplete="current-password"
-            helperText={touched.password ? errors.password : ''}
+            t={touched.password ? errors.password : ''}
             error={touched.password && Boolean(errors.password)}
             value={values.password}
             onChange={handleChange}

@@ -19,9 +19,11 @@ const createMessage = async (message) => {
   return message;
 };
 
+//this controller will be imported to the socket server to be sent to recipient
 exports.sendMessage = asyncHandler(async (req, res, next) => {
   const message = await createMessage(req.body);
-
+  res.status('200').send('success');
+  return message;
 });
 
 exports.findAllConversationMessages = asyncHandler(async (req, res, next) => {

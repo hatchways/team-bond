@@ -1,4 +1,4 @@
-import { Field, Formik } from 'formik';
+import { Field } from 'formik';
 import { Checkbox, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material/';
 import React from 'react';
 
@@ -7,7 +7,6 @@ interface AvailabilityTableProps {
 }
 
 const AvailabilityTable: React.FC<AvailabilityTableProps> = (values) => {
-  console.log((values as any).values.days);
   const options: { value: string; label: string }[] = [];
   for (let i = 0; i < 25; i++) {
     i < 10

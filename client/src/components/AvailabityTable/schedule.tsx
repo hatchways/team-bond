@@ -1,5 +1,5 @@
-import { Formik, Field, Form, useField } from 'formik';
-import { Select, Checkbox, Typography, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material/';
+import { Formik, Field, Form } from 'formik';
+import { Select, Typography, Button, Grid } from '@mui/material/';
 import React from 'react';
 import AvailabilityTable from './AvailabiltyTable';
 
@@ -11,14 +11,23 @@ const Schedule: React.FC = () => {
         Your availability
       </Typography>
       <Formik
+        //APICall will populate default values for now its hard coded until integration
         initialValues={{
-          schedules: new Map<string, { [key: string]: any }>(),
-          scheduleType: '',
-          days: [],
+          scheduleName: 'work week',
+          days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+          hours: [
+            { sunFrom: '00:00', sunTo: '00:00' },
+            { monFrom: '00:00', monTo: '00:00' },
+            { tueFrom: '00:00', tueTo: '00:00' },
+            { wedFrom: '00:00', wedTo: '00:00' },
+            { thurFrom: '00:00', thurTo: '00:00' },
+            { friFrom: '00:00', friTo: '00:00' },
+            { satFrom: '00:00', satTo: '00:00' },
+          ],
         }}
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);
-          console.log(values.schedules); // APICall from helper goes here
+          console.log(values); // APICall from helper goes here
           setSubmitting(false);
         }}
       >
@@ -38,20 +47,16 @@ const Schedule: React.FC = () => {
                       },
                     };
                   });
-                  values.scheduleType
-                    ? setFieldValue('schedules', { [(values as any).scheduleType]: daysAvailabilty })
-                    : null;
-                  handleSubmit();
+                  values.scheduleName ? setFieldValue('hours', daysAvailabilty) : null;
                 }}
               >
                 <Field
-                  name="scheduleType"
+                  name="scheduleName"
                   component="select"
                   as={Select}
                   style={{ height: '30px', fontWeight: 'bold', justifyContent: 'center' }}
                   defaultValue={{ label: 'Select Dept', value: 0 }}
                 >
-                  <option value="" label="Work hours"></option>
                   {schedulesType.map((schedule) => {
                     return (
                       <option key={schedule.name} value={schedule.name}>
@@ -78,6 +83,21 @@ const Schedule: React.FC = () => {
                   </Typography>
                 </label>
                 <AvailabilityTable values={values as any} />
+                <Grid style={{ display: 'flex', justifyContent: 'center' }}>
+                  <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                    <Button
+                      type="submit"
+                      style={{
+                        marginTop: '15px',
+                        border: '1px solid grey',
+                        backgroundColor: '#f14140',
+                        color: 'white',
+                      }}
+                    >
+                      submit
+                    </Button>
+                  </Grid>
+                </Grid>
                 <pre>{JSON.stringify(values, null, 2)}</pre>
               </Form>
             </>

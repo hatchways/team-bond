@@ -40,7 +40,8 @@ const Schedule: React.FC = () => {
               };
             });
             values.scheduleName
-              ? (setFieldValue('hours', daysAvailabilty), setFieldValue('scheduleName', values.hours))
+              ? (setFieldValue('hours', daysAvailabilty),
+                setFieldValue('scheduleName', { [(values as any).scheduleName]: values.hours }))
               : null;
           }
           console.log(values.scheduleName); // APICall from helper goes here

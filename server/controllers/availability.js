@@ -55,9 +55,14 @@ exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
 // @route POST /availability/{sitterId}
 // @access Private
 exports.createAvailability = asyncHandler(async (req, res, next) => {
-  const countActive = await Availability.count({ sitterId: req.params.sitterId , active: true });
+  const loggedInUser = req.user.id ?? false;
 
-  const availability = await Availability.create({ ...req.body, sitterId: req.params.sitterId });
+  if (!loggedInUser) {
+    res.status(500);
+    throw new Error("Error finding user");
+  }
+
+  const availability = await Availability.create({ ...req.body, sitterId: loggedInUser });
   res.status(201).json({ success: { availability } });
 });
 
@@ -71,17 +76,16 @@ exports.updateAvailability = asyncHandler(async (req, res, next) => {
     throw new Error(`Not found`);
   }
 
-  const countActive = await Availability.count({ sitterId: req.body.sitterId , active: true });
-  if (countActive >= 1  && req.body.active) {
-    res.status(400);
-    throw new Error(
-      "More than one active availability record not allowed. Disable other availability records before proceeding"
-    );
+  const loggedInUser = req.user.id ?? false;
+
+  if (!loggedInUser) {
+    res.status(500);
+    throw new Error("Error finding user");
   }
 
   const updated = await Availability.findByIdAndUpdate(
     req.params.recordId,
-    { ...req.body },
+    { ...req.body, sitterId: loggedInUser },
     { new: true },
   );
   res.status(200).json({ success: { availability: updated } });

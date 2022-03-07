@@ -16,40 +16,41 @@ const Schedule: React.FC = () => {
           scheduleName: 'work week',
           days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
           hours: [
-            { sunFrom: '00:00', sunTo: '00:00' },
-            { monFrom: '00:00', monTo: '00:00' },
-            { tueFrom: '00:00', tueTo: '00:00' },
-            { wedFrom: '00:00', wedTo: '00:00' },
-            { thurFrom: '00:00', thurTo: '00:00' },
-            { friFrom: '00:00', friTo: '00:00' },
-            { satFrom: '00:00', satTo: '00:00' },
+            { sunday: { From: '00:00', To: '00:00' } },
+            { monday: { From: '00:00', To: '00:00' } },
+            { tuesday: { From: '00:00', To: '00:00' } },
+            { wednesday: { From: '00:00', To: '00:00' } },
+            { thursday: { From: '00:00', To: '00:00' } },
+            { friday: { From: '00:00', To: '00:00' } },
+            { saturday: { From: '00:00', To: '00:00' } },
           ],
         }}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting, setFieldValue }) => {
           setSubmitting(true);
-          console.log(values); // APICall from helper goes here
+          {
+            const dayArr = values.days;
+            const daysAvailabilty = dayArr.map((day) => {
+              const from = `${day}From`;
+              const to = `${day}To`;
+              return {
+                [day]: {
+                  From: (values as any)[from] || '00:00',
+                  To: (values as any)[to] || '00:00',
+                },
+              };
+            });
+            values.scheduleName
+              ? (setFieldValue('hours', daysAvailabilty), setFieldValue('scheduleName', values.hours))
+              : null;
+          }
+          console.log(values.scheduleName); // APICall from helper goes here
           setSubmitting(false);
         }}
       >
-        {({ values, setFieldValue, handleSubmit }) => {
+        {({ values }) => {
           return (
             <>
-              <Form
-                onClick={() => {
-                  const dayArr = values.days;
-                  const daysAvailabilty = dayArr.map((day) => {
-                    const from = `${day}From`;
-                    const to = `${day}To`;
-                    return {
-                      [day]: {
-                        From: (values as any)[from] || '00:00',
-                        To: (values as any)[to] || '00:00',
-                      },
-                    };
-                  });
-                  values.scheduleName ? setFieldValue('hours', daysAvailabilty) : null;
-                }}
-              >
+              <Form>
                 <Field
                   name="scheduleName"
                   component="select"

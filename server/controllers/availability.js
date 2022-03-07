@@ -56,12 +56,6 @@ exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.createAvailability = asyncHandler(async (req, res, next) => {
   const countActive = await Availability.count({ sitterId: req.params.sitterId , active: true });
-  if (countActive >= 1 && req.body.active) {
-    res.status(400);
-    throw new Error(
-      "More than one active availability records not allowed. Disable other availability records before proceeding"
-    );
-  }
 
   const availability = await Availability.create({ ...req.body, sitterId: req.params.sitterId });
   res.status(201).json({ success: { availability } });

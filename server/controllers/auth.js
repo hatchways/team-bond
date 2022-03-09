@@ -2,12 +2,14 @@ const User = require("../models/User");
 const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const sitterSchema = require("../models/Profile");
 
 // @route POST /auth/register
 // @desc Register user
 // @access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
+  const accountType = req.query.accountType; 
 
   const emailExists = await User.findOne({ email });
 
@@ -29,7 +31,39 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     password
   });
 
-  if (user) {
+ if(user && accountType == "petSitter") {
+    await sitterSchema.create({
+      kind: "Sitter",
+      userId: user._id,
+      name,
+      stripeConnectId,
+      availabilityId,
+      actiiveScheduleId,
+      requests,
+      rate
+    });
+    const token = generateToken(user._id);
+    const secondsInWeek = 604800;
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: secondsInWeek * 1000
+    });
+
+    res.status(201).json({
+      success: {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        }
+      }
+    });
+  }else if(!user){
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+  else{
     await Profile.create({
       userId: user._id,
       name
@@ -52,10 +86,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         }
       }
     });
-  } else {
-    res.status(400);
-    throw new Error("Invalid user data");
   }
+
 });
 
 // @route POST /auth/login

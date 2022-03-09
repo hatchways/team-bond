@@ -6,6 +6,8 @@ const Conversation = require('../models/Conversation');
 
 const createConversation = async (participants) => await Conversation.create(participants);
 
+
+// no routes as this will be used inside sendMessage which will use sockets
 const createMessage = async (message) => {
   const { conversationId } = message;
   const { senderId, recipientId } = message;
@@ -26,12 +28,16 @@ exports.sendMessage = asyncHandler(async (req, res, next) => {
   return message;
 });
 
+// @route GET /messages/all
+// @desc gets all messages from a conversation
 exports.findAllConversationMessages = asyncHandler(async (req, res, next) => {
   const conversationId = req.body.conversationId;
   const messages = Message.find({ conversationId });
   res.send(messages);
 });
 
+// @route GET /messages/allConversations/:id
+// @desc gets all conversations on user
 exports.findAllConversations = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const conversations = await Conversation.find({

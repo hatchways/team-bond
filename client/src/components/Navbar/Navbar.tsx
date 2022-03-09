@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/useAuthContext';
 import {
@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem as DropdownMenuItem,
   styled,
+  Typography,
 } from '@mui/material';
 import { AccountType } from '../../types/AccountType';
 
@@ -25,13 +26,17 @@ const NavbarButton = styled(Button)({
 
 const menuItems = [
   {
-    item: 'Become a Sitter',
+    item: "BECOME A SITTER",
     resource: '/dashboard',
     canView: [AccountType.PET_OWNER],
     authenticated: true,
   },
   {
-    item: 'Become a sitter',
+    item: (
+      <Typography sx={{color: sitterColor(window.location.href), textDecorationLine: sitterLine(window.location.href), '&:hover': {color: "#f14140"}}}>
+          BECOME A SITTER
+      </Typography>
+    ),
     resource: '/signup?accountType=pet_sitter',
     canView: null,
     authenticated: false,
@@ -56,7 +61,7 @@ const menuItems = [
   },
   {
     item: (
-      <NavbarButton variant="outlined" size="large" fullWidth>
+      <NavbarButton variant="outlined" size="large" fullWidth sx={{zIndex: 2, color: loginColor(window.location.href), borderColor: loginColor(window.location.href)}}>
         Login
       </NavbarButton>
     ),
@@ -66,7 +71,7 @@ const menuItems = [
   },
   {
     item: (
-      <NavbarButton variant="contained" size="large" fullWidth disableElevation>
+      <NavbarButton variant="contained" size="large" fullWidth disableElevation sx={{zIndex: 2, textDecorationLine: "none"}}>
         Sign up
       </NavbarButton>
     ),
@@ -76,14 +81,35 @@ const menuItems = [
   },
 ];
 
+function sitterColor(thisUrl:string){
+  if(thisUrl.indexOf("login")> -1){
+    return "#FFFFFF";
+  }
+  return "#000000";
+}
+
+function sitterLine(thisUrl:string){
+  if(thisUrl.indexOf("login")> -1 ){
+    return "underline";
+  }
+  return "none";
+}
+
+function loginColor(thisUrl:string){
+  if(thisUrl.indexOf("login")> -1){
+    return "#FFFFFF";
+  }
+  return "#f14140";
+}
+
 const MenuItem: React.FC<{
   resource: string;
-  item: string | JSX.Element;
+  item: ReactNode;
 }> = ({ resource, item }) => {
   const classes = useStyles();
 
   return (
-    <Grid key={resource} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
+    <Grid key={resource} sx={{ textAlign: 'center', zIndex: 2}} xs={2} justifySelf="flex-end" item>
       <NavLink className={classes.navbarItem} to={resource}>
         {item}
       </NavLink>
@@ -133,10 +159,10 @@ const Navbar: React.FC = () => {
         <img className={classes.navbarLogo} src={lovingSitterLogo} />
       </Grid>
       <Grid xs={8} md={6} item>
-        <Grid container alignItems="center" gap={2} justifyContent="flex-end">
+        <Grid container alignItems="center" gap={2} justifyContent="flex-end" >
           {renderMenuItems()}
           {loggedInUser && (
-            <Grid xs={2} item>
+            <Grid xs={2} item >
               <>
                 <IconButton
                   size="large"

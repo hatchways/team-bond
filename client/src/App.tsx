@@ -13,6 +13,7 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import { Navbar } from './components/Navbar/Navbar';
 import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
+import LandingPage from './pages/LandingPage/LandingPage';
 
 function App(): JSX.Element {
   return (
@@ -28,6 +29,7 @@ function App(): JSX.Element {
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route path="/profile/settings" component={Settings} />
+                <Route exact path="/landingpage" component={LandingPage} />
                 <Route path="*">
                   <NotFound />
                 </Route>

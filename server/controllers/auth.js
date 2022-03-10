@@ -3,6 +3,7 @@ const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 const sitterSchema = require("../models/Profile");
+const stripe = require('../utils/stripe');
 
 // @route POST /auth/register
 // @desc Register user
@@ -63,10 +64,20 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     res.status(400);
     throw new Error("Invalid user data");
   }
-  else{
+ else {
+    // create stripe customer account when not sitter
+    const booking = { userId: user._id };
+    const stripeCustomer = await stripe.createStripeCustomer(booking);
+
+    if (!stripeCustomer) {
+      res.status(500);
+      throw new Error("An error has occurred creating your account");
+    }
+
     await Profile.create({
       userId: user._id,
-      name
+      name,
+      stripeCustomerId: stripeCustomer.id,
     });
 
     const token = generateToken(user._id);

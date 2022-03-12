@@ -165,3 +165,36 @@ exports.logoutUser = asyncHandler(async (req, res, next) => {
 
   res.send("You have successfully logged out");
 });
+
+// @route POST /auth/demo
+// @desc Demo user
+// @access Public
+exports.demoUser = asyncHandler(async (req, res, next) => {
+  const email = process.env.DEMO_EMAIL;
+  const password = process.env.DEMO_PASSWORD;
+
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    const token = generateToken(user._id);
+    const secondsInWeek = 604800;
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: secondsInWeek * 1000
+    });
+
+    res.status(200).json({
+      success: {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        }
+      }
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+});

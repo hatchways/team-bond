@@ -4,7 +4,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
+import { useAuth } from '../../../context/useAuthContext';
+import { useSnackBar } from '../../../context/useSnackbarContext';
 import FormInput from '../../../components/FormInput/FormInput';
+import demoLogin from '../../../helpers/APICalls/demoLogin';
 
 interface Props {
   handleSubmit: (
@@ -27,6 +30,23 @@ interface Props {
 
 export default function Login({ handleSubmit }: Props): JSX.Element {
   const classes = useStyles();
+
+  const { updateLoginContext } = useAuth();
+  const { updateSnackBarMessage } = useSnackBar();
+
+  const handleDemoLogin = () => {
+    demoLogin().then((data) => {
+      if (data.error) {
+        updateSnackBarMessage(data.error.message);
+      } else if (data.success) {
+        updateLoginContext(data.success);
+      } else {
+        console.error({ data });
+
+        updateSnackBarMessage('An unexpected error occurred. Please try again');
+      }
+    });
+  };
 
   return (
     <Formik
@@ -75,7 +95,7 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             onChange={handleChange}
           />
 
-          <Box textAlign="center" marginTop={5}>
+          <Box textAlign="center" marginTop={5} display="flex" justifyContent="space-between">
             <Button
               type="submit"
               size="large"
@@ -85,6 +105,17 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
               disableElevation
             >
               {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Login'}
+            </Button>
+            <Button
+              type="submit"
+              size="large"
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={handleDemoLogin}
+              disableElevation
+            >
+              {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Demo Login'}
             </Button>
           </Box>
         </form>

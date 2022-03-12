@@ -7,7 +7,7 @@ const CURRENCY = 'usd';
 exports.createStripeCustomer = async (booking) => {
   const user = await User.findById(booking.userId);
   const { name, email } = user;
-  const customer = await stripe.create({
+  const customer = await stripe.customers.create({
     name: name,
     email: email,
   });

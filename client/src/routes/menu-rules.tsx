@@ -2,6 +2,8 @@ import { Button, styled } from '@mui/material';
 import { AppRoles } from '.';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Login from '../pages/Login/Login';
+import ProfileDetail from '../pages/Profile/ProfileDetail.tsx/ProfileDetail';
+import Settings from '../pages/Settings/Settings';
 import SignUp from '../pages/SignUp/SignUp';
 
 /**
@@ -18,6 +20,10 @@ export interface IMenuItemRule {
    * Optional: page to render
    */
   page?: React.FunctionComponent<any>;
+  /**
+   * Hide frm the menu?
+   */
+  hide?: boolean;
   /**
    * Optional: component to render
    */
@@ -83,6 +89,22 @@ export class MenuResolver {
       page: Dashboard, // dashboard until integrated
       path: '/messages',
       canView: [AppRoles.PET_SITTER, AppRoles.PET_OWNER],
+      authenticated: true,
+    },
+    {
+      label: 'Settings',
+      page: Settings,
+      hide: true,
+      path: '/profile/settings',
+      canView: [AppRoles.PET_OWNER, AppRoles.PET_SITTER],
+      authenticated: true,
+    },
+    {
+      label: '',
+      hide: true,
+      page: ProfileDetail,
+      path: '/profile/:id',
+      canView: [AppRoles.PET_OWNER],
       authenticated: true,
     },
   ];

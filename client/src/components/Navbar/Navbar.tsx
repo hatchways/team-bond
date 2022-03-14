@@ -21,7 +21,7 @@ import { IMenuItemRule, MenuResolver } from '../../routes';
 
 // TODO integrate with real role from user
 const menuItems: IMenuItemRule[] = [
-  ...MenuResolver.generateRootMenuRules(demoRole),
+  ...MenuResolver.generateRootMenuRules(demoRole).filter((rule) => !rule.hide),
   ...MenuResolver.getAuthMenuRules(),
 ];
 

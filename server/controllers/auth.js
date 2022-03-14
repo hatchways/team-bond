@@ -170,10 +170,12 @@ exports.logoutUser = asyncHandler(async (req, res, next) => {
 // @desc Demo user
 // @access Public
 exports.demoUser = asyncHandler(async (req, res, next) => {
-  const email = process.env.DEMO_EMAIL;
-  const password = process.env.DEMO_PASSWORD;
+  const email = process.env.DEMO_USER_EMAIL;
+  const password = process.env.DEMO_USER_PASSWORD;
 
   const user = await User.findOne({ email });
+
+  const profile = await Profile.findOne({ userId: user._id });
 
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(user._id);
@@ -190,7 +192,8 @@ exports.demoUser = asyncHandler(async (req, res, next) => {
           id: user._id,
           name: user.name,
           email: user.email
-        }
+        },
+        profile
       }
     });
   } else {

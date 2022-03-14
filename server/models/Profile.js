@@ -37,6 +37,10 @@ const profileSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    stripeCustomerId: {
+      type: String,
+      default: ''
+    }
   },
   options
 );
@@ -73,4 +77,4 @@ const sitterSchema = Profile.discriminator(
 
 
 
-module.exports = Profile;
+module.exports = Profile, sitterSchema;

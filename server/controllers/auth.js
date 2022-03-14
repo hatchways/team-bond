@@ -2,6 +2,8 @@ const User = require("../models/User");
 const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const sitterSchema = require("../models/Profile");
+const stripe = require('../utils/stripe');
 
 // @route POST /auth/register
 // @desc Register user
@@ -9,6 +11,7 @@ const generateToken = require("../utils/generateToken");
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
   let profile = {};
+  const accountType = req.query.accountType;
 
   const emailExists = await User.findOne({ email });
 
@@ -35,7 +38,19 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       userId: user._id,
       name
     });
+  }
 
+  if (user && accountType == "petSitter") {
+    await sitterSchema.create({
+      kind: "Sitter",
+      userId: user._id,
+      name,
+      stripeConnectId,
+      availabilityId,
+      actiiveScheduleId,
+      requests,
+      rate,
+    });
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
 
@@ -54,10 +69,45 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         profile
       }
     });
-  } else {
+  } else if (!user) {
     res.status(400);
     throw new Error("Invalid user data");
   }
+  else {
+    // create stripe customer account when not sitter
+    const booking = { userId: user._id };
+    const stripeCustomer = await stripe.createStripeCustomer(booking);
+
+    if (!stripeCustomer) {
+      res.status(500);
+      throw new Error("An error has occurred creating your account");
+    }
+
+    await Profile.create({
+      userId: user._id,
+      name,
+      stripeCustomerId: stripeCustomer.id,
+    });
+
+    const token = generateToken(user._id);
+    const secondsInWeek = 604800;
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: secondsInWeek * 1000
+    });
+
+    res.status(201).json({
+      success: {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        }
+      }
+    });
+  }
+
 });
 
 // @route POST /auth/login
@@ -124,4 +174,40 @@ exports.logoutUser = asyncHandler(async (req, res, next) => {
   res.clearCookie("token");
 
   res.send("You have successfully logged out");
+});
+
+// @route POST /auth/demo
+// @desc Demo user
+// @access Public
+exports.demoUser = asyncHandler(async (req, res, next) => {
+  const email = process.env.DEMO_USER_EMAIL;
+  const password = process.env.DEMO_USER_PASSWORD;
+
+  const user = await User.findOne({ email });
+
+  const profile = await Profile.findOne({ userId: user._id });
+
+  if (user && (await user.matchPassword(password))) {
+    const token = generateToken(user._id);
+    const secondsInWeek = 604800;
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: secondsInWeek * 1000
+    });
+
+    res.status(200).json({
+      success: {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        },
+        profile
+      }
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
 });

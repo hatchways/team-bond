@@ -8,6 +8,7 @@ const generateToken = require("../utils/generateToken");
 // @access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
+  let profile = {};
 
   const emailExists = await User.findOne({ email });
 
@@ -30,7 +31,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   });
 
   if (user) {
-    await Profile.create({
+    profile = await Profile.create({
       userId: user._id,
       name
     });
@@ -49,7 +50,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
           id: user._id,
           name: user.name,
           email: user.email
-        }
+        },
+        profile
       }
     });
   } else {
@@ -65,7 +67,8 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-
+  userId = user.id;
+  let profile = await Profile.findOne({ userId });
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
@@ -81,7 +84,8 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
           id: user._id,
           name: user.name,
           email: user.email
-        }
+        },
+        profile
       }
     });
   } else {
@@ -109,7 +113,6 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
         name: user.name,
         email: user.email
       },
-      profile
     }
   });
 });

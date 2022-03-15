@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import {
-  Button,
   Divider,
   Grid,
   IconButton,
@@ -11,82 +10,28 @@ import {
   ListItemText,
   Menu,
   MenuItem as DropdownMenuItem,
-  styled,
 } from '@mui/material';
-import { AccountType } from '../../types/AccountType';
 
 import lovingSitterLogo from '../../images/logo.svg';
 import { useStyles } from './useStyles';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person } from '@mui/icons-material';
+import { demoRole } from '../../routes/AppRoutes';
+import { IMenuItemRule, MenuResolver } from '../../routes';
 
-const NavbarButton = styled(Button)({
-  padding: '15px 0',
-});
-
-const menuItems = [
-  {
-    item: 'Become a Sitter',
-    resource: '/dashboard',
-    canView: [AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: 'Become a sitter',
-    resource: '/signup?accountType=pet_sitter',
-    canView: null,
-    authenticated: false,
-  },
-  {
-    item: 'My Jobs',
-    resource: '/my-jobs',
-    canView: [AccountType.PET_SITTER],
-    authenticated: true,
-  },
-  {
-    item: 'My Sitters',
-    resource: '/sitters',
-    canView: [AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: 'Messages',
-    resource: '/messages',
-    canView: [AccountType.PET_SITTER, AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: (
-      <NavbarButton variant="outlined" size="large" fullWidth>
-        Login
-      </NavbarButton>
-    ),
-    resource: '/login',
-    canView: null,
-    authenticated: false,
-  },
-  {
-    item: (
-      <NavbarButton variant="contained" size="large" fullWidth disableElevation>
-        Sign up
-      </NavbarButton>
-    ),
-    resource: '/signup',
-    canView: null,
-    authenticated: false,
-  },
+// TODO integrate with real role from user
+const menuItems: IMenuItemRule[] = [
+  ...MenuResolver.generateRootMenuRules(demoRole).filter((rule) => !rule.hide),
+  ...MenuResolver.getAuthMenuRules(),
 ];
 
-const MenuItem: React.FC<{
-  resource: string;
-  item: string | JSX.Element;
-}> = ({ resource, item }) => {
+const MenuItem: React.FC<{ path: string; component?: JSX.Element; label?: string }> = ({ path, component, label }) => {
   const classes = useStyles();
 
   return (
-    <Grid key={resource} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
-      <NavLink className={classes.navbarItem} to={resource}>
-        {item}
+    <Grid key={path} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
+      <NavLink className={classes.navbarItem} to={path}>
+        {component && component} {label && label}
       </NavLink>
     </Grid>
   );
@@ -118,9 +63,9 @@ const Navbar: React.FC = () => {
     // TODO: conditionally render based on profile type
     return menuItems.map((menu) => {
       if (menu.authenticated) {
-        return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+        return loggedInUser && <MenuItem key={menu.path} path={menu.path} label={menu.label} />;
       } else {
-        return !loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+        return !loggedInUser && <MenuItem key={menu.path} path={menu.path} component={menu.component} />;
       }
     });
   };

@@ -43,12 +43,12 @@ export default function Settings(): JSX.Element {
   const history = useHistory();
   const classes = useStyles();
 
-  // if (loggedInUser === undefined) return <CircularProgress />;
-  // if (!loggedInUser || !profile) {
-  //   history.push('/login');
-  //   // loading for a split seconds until history.push works
-  //   return <CircularProgress />;
-  // }
+  if (loggedInUser === undefined) return <CircularProgress />;
+  if (!loggedInUser || !profile) {
+    history.push('/login');
+    // loading for a split seconds until history.push works
+    return <CircularProgress />;
+  }
 
   return (
     <PageContainer>

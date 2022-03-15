@@ -25,25 +25,28 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [profile, setProfile] = useState();
   const history = useHistory();
 
-  const updateLoginContext = useCallback((data: AuthApiDataSuccess) => {
-    console.log(data);
-    setLoggedInUser(data.user);
-    setProfile(data.profile);
-    // if (data.user && (history.location.pathname === '/login' || history.location.pathname === '/signup')) {
-    //   history.push('/dashboard');
-    // }
-  }, []);
+  const updateLoginContext = useCallback(
+    (data: AuthApiDataSuccess) => {
+      console.log(data);
+      setLoggedInUser(data.user);
+      setProfile(data.profile);
+      if (data.user && (history.location.pathname === '/login' || history.location.pathname === '/signup')) {
+        history.push('/dashboard');
+      }
+    },
+    [history],
+  );
 
   const logout = useCallback(async () => {
     // needed to remove token cookie
     await logoutAPI()
       .then(() => {
-        // history.push('/login');
+        history.push('/login');
         setLoggedInUser(null);
         setProfile(undefined);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [history]);
 
   // use our cookies to check if we can login straight away
   useEffect(() => {
@@ -54,9 +57,9 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
         } else {
           // don't need to provide error feedback as this just means user doesn't have saved cookies or the cookies have not been authenticated on the backend
           setLoggedInUser(null);
-          // if (!(history.location.pathname === '/signup')) {
-          //   history.push('/login');
-          // }
+          if (!(history.location.pathname === '/signup')) {
+            history.push('/login');
+          }
         }
       });
     };

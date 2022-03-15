@@ -9,9 +9,9 @@ import AuthPageWrapper from '../../components/AuthPageWrapper/AuthPageWrapper';
 import AuthPageFooter from '../../components/AuthPageFooter/AuthPageFooter';
 
 export default function Login(): JSX.Element {
+  const { socket } = useSocket();
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
-  const { socket } = useSocket();
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
@@ -22,6 +22,7 @@ export default function Login(): JSX.Element {
         setSubmitting(false);
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
+        socket ? socket.emit('authenticate') : null;
         updateLoginContext(data.success);
         socket?.emit('authenticate');
       } else {

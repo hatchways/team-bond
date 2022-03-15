@@ -1,0 +1,29 @@
+version: '3'
+services:
+  server:
+    build:
+      context: server/.
+    container_name: server
+    ports:
+      - 3001:3001
+  
+  client:
+    build:
+      context: client/.
+    container_name: client
+    ports:
+      - 3000:3000        
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    env_file:
+      - server/.env
+    volumes:
+      - ./mongo-data:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+
+volumes:
+  mongo-data:

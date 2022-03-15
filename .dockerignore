@@ -1,0 +1,10 @@
+**/node_modules
+**/dist
+**/*.gitignore
+*.md
+**/.git
+**/.husky
+**/.circleci
+**/pgdata
+**/.vscode/*
+mongo-data

@@ -14,6 +14,7 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const profileRouter = require('./routes/profile');
 const bookingRouter = require('./routes/booking');
+const availabilityRouter = require('./routes/availability');
 
 const { json, urlencoded } = express;
 
@@ -48,6 +49,7 @@ app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/profile', profileRouter);
 app.use('/booking', bookingRouter);
+app.use('/availability', availabilityRouter);
 
 
 if (process.env.NODE_ENV === 'production') {

@@ -1,8 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const Availability = require('../models/Availability');
+const Profile = require('../models/Profile');
+const mongoose = require('mongoose');
 
 // @route GET /availability/?monday[from]={900}&monday[to]={1300}, etc
-// @desc Get available sitter list based on required customer availability from query
+// @desc Get available profiles list based on required customer availability from query
 // @access Private
 exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
   const query = { ...req.query };
@@ -40,14 +42,27 @@ exports.getAvailableSitters = asyncHandler(async (req, res, next) => {
     }
   });
 
+  // available sitters
   const availableSitters = await Availability.find({
     active: true,
     ...customerSpec,
   });
 
+  let sitterIds = [];
+  availableSitters.forEach((item) => {
+    sitterIds.push(mongoose.Types.ObjectId(item.sitterId));
+  });
+
+  // get their profiles
+  const matchingProfiles = await Profile.find({
+    userId: {
+      $in: sitterIds
+    }
+  });
+
   res.status(200).json({
     success: {
-      data: availableSitters ?? []
+      data: matchingProfiles ?? []
     }
   });
 });

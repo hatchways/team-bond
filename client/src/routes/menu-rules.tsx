@@ -5,7 +5,6 @@ import Login from '../pages/Login/Login';
 import ProfileDetail from '../pages/Profile/ProfileDetail.tsx/ProfileDetail';
 import Settings from '../pages/Settings/Settings';
 import SignUp from '../pages/SignUp/SignUp';
-
 /**
  * Route Rules used to
  * 1. Hold Metadata for which roles see what

@@ -66,6 +66,9 @@ const sitterSchema = Profile.discriminator(
       required: true,
       ref: 'Request',
     },
+    blurb: {
+      type: String,
+    },
     rate: {
       type: Number,
       required: true,

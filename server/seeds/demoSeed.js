@@ -15,6 +15,7 @@ const seedDemoUser = async () => {
       userId: newUser._id,
       name: newUser.name,
       description: 'Demo description',
+      blurb: 'Passionate pet sitter',
       gender: 'other',
       address: '123 fake ave',
       telephone: '123-123-1234',

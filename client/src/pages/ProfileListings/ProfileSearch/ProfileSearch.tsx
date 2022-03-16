@@ -6,12 +6,43 @@ import DatePicker from '@mui/lab/DatePicker';
 
 import { useState } from 'react';
 
-const ProfileSearch = (): JSX.Element => {
-  const [dateValue, setDateValue] = useState(null);
+interface Props {
+  onChildFilterChange: ({ date, city }: { date: Date; city: string }) => void;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const ProfileSearch = ({ onChildFilterChange = () => {} }: Props): JSX.Element => {
   const classes = useStyles();
 
-  const handleChange = (newDateValue: any) => {
-    setDateValue(newDateValue);
+  const now = new Date();
+  const [filters, setFilters] = useState({
+    date: now,
+    city: '',
+  });
+
+  /**
+   * calls parent function
+   * @param date date
+   * @param city city
+   */
+  const handleFilterChange = (date: Date, city: string) => {
+    onChildFilterChange({ date, city });
+  };
+
+  const handleDateChange = (dateFilter: any) => {
+    setFilters({
+      ...filters,
+      date: dateFilter,
+    });
+    handleFilterChange(filters.date, filters.city);
+  };
+
+  const handleCitySearch = (event: any) => {
+    setFilters({
+      ...filters,
+      city: event.target.value,
+    });
+    handleFilterChange(filters.date, filters.city);
   };
 
   return (
@@ -26,13 +57,21 @@ const ProfileSearch = (): JSX.Element => {
       <Box maxWidth={675} margin="auto" className={classes.boxContainer}>
         <Grid container marginTop={4} direction="row" justifyContent="space-between">
           <Grid item xs={12} sm={8}>
-            <TextField variant="outlined" color="secondary" label="Search By city" fullWidth></TextField>
+            <TextField
+              variant="outlined"
+              name="city"
+              color="secondary"
+              label="Search By city"
+              fullWidth
+              onChange={handleCitySearch}
+            ></TextField>
           </Grid>
           <Grid item xs={12} sm={4}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                value={dateValue}
-                onChange={handleChange}
+                // name="date"
+                value={filters.date}
+                onChange={handleDateChange}
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>

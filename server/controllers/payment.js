@@ -22,14 +22,8 @@ exports.getAllPayments = asyncHandler(async (req, res, next) => {
 // @route POST /payments/:paymentid/pay
 // @desc Make a payment for the service
 // @access Private
-exports.registerUser = asyncHandler(async (req, res, next) => {
+exports.makePayment = asyncHandler(async (req, res, next) => {
     const { rate, hoursOfService, totalPayment } = req.body;
-    const customerIdExists = await Payment.findOne({ customerId });
-  
-    if (customerIdExists) {
-      res.status(400);
-      throw new Error("This session has been already paid for");
-    }
     const payment = await Payment.create({
       userId,
       sitterId, 
@@ -66,18 +60,10 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 // @desc Cancels a payment intent (only for the merchant)
 // @access Private
 exports.cancelPayment = asyncHandler(async (req, res, next) => {
-    const payment = await PaymentfindOne({ customerId: req.params.id });
+    const [paymentStatus, setPaymentStatus] = useState("");
+    const payment = await PaymentfindOne({ userId: req.params.id });
   
-    if (!payment) {
-      res.status(404);
-      throw new Error("Payment does not exist");
-    }
     payment.set(req.body);
-    const canceledPayment = await payment('Payment').deleteOne({payment: customerId});
-    res.status(200).json({
-      success: {
-        payment: canceledPayment,
-      },
-    });
+    setPaymentStatus("Cancelled");
   });
   

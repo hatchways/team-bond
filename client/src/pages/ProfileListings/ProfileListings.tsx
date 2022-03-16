@@ -1,54 +1,34 @@
-import { Avatar, Card, CardActionArea, CardHeader, Divider, Grid, Typography } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { Box } from '@mui/system';
+import { Box, Grid } from '@mui/material';
 import { profileData } from './data';
-import useStyles from './useStyles';
-import { Navbar } from '../../components/Navbar/Navbar';
+import { useState } from 'react';
+import { SitterProfileForList } from '../../interface/SitterProfileForList';
 import ProfileSearch from './ProfileSearch/ProfileSearch';
+import ProfileListingItem from '../../components/ProfileListingItem/ProfileListingItem';
+import getFilteredProfile from '../../helpers/APICalls/getProfiles';
 
 const ProfileListings = (): JSX.Element => {
-  const classes = useStyles();
-  const allProfiles = profileData.map((profile) => {
-    return (
-      <Grid item xs={12} sm={6} md={4} key={profile.firstName} marginBottom={5}>
-        <Card raised={true} className={classes.profileCard}>
-          <CardActionArea>
-            <Box className={classes.cardHeader}>
-              <Avatar src="" className={classes.avatar} />
-              <Typography
-                variant="h5"
-                className={classes.boldFont}
-              >{`${profile.firstName} ${profile.lastName}`}</Typography>
-              <Typography variant="subtitle1" color="red" className={classes.boldFont}>
-                {profile.title}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="body1" className={classes.boldFont}>
-                {profile.description}
-              </Typography>
-            </Box>
-            <Divider />
-            <Box display="flex" justifyContent="space-between" alignItems="center" className={classes.cardFooter}>
-              <Typography variant="body1" color="secondary" className={classes.location}>
-                <LocationOnIcon color="primary"></LocationOnIcon>
-                {profile.city}
-              </Typography>
-              <Typography variant="body1" className={classes.boldFont} style={{ fontWeight: 600 }}>
-                {profile.rate}/hr
-              </Typography>
-            </Box>
-          </CardActionArea>
-        </Card>
-      </Grid>
-    );
+  const [profiles, setProfiles] = useState<SitterProfileForList[]>(profileData);
+
+  /**
+   * function that the child component will receive and we should expect
+   * a filer object
+   * @param param0 filters
+   */
+  const handleChildOnFilterChange = ({ date, city }: { date: Date; city: string }) => {
+    console.log('parent received child date', date);
+    console.log('parent received child city', city);
+    getFilteredProfile();
+  };
+
+  const RenderProfiles = profiles.map((profile: SitterProfileForList) => {
+    return <ProfileListingItem key={profile._id} {...profile} />;
   });
+
   return (
     <Box>
-      <Navbar />
-      <ProfileSearch />
+      <ProfileSearch onChildFilterChange={handleChildOnFilterChange} />
       <Grid container spacing={2} alignItems="center" marginTop={10} justifyContent="space-even">
-        {allProfiles}
+        {RenderProfiles}
       </Grid>
     </Box>
   );

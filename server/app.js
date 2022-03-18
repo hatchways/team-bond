@@ -9,6 +9,7 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const jwt = require("jsonwebtoken");
+const { seedData } = require("./seeds/demoSeed");
 
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
@@ -73,5 +74,7 @@ process.on('unhandledRejection', (err, promise) => {
   // Close server & exit process
   server.close(() => process.exit(1));
 });
+
+seedData();
 
 module.exports = { app, server };

@@ -4,6 +4,7 @@ export interface SitterProfileForList {
   name: string;
   description: string;
   blurb: string;
+  address: string;
   city: string;
   photo?: string;
   rate: number;

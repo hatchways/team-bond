@@ -2,12 +2,13 @@ import { Avatar, Box, Card, CardActionArea, Divider, Grid, Typography } from '@m
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import toCurrency from '../../helpers/Transform/currency-transform';
 import useStyles from './useStyles';
+import { useEffect, useState } from 'react';
 
 interface Props {
   name: string;
   blurb: string;
   description: string;
-  city: string;
+  address: string;
   rate: number;
   photo?: string;
 }
@@ -15,8 +16,14 @@ interface Props {
 /**
  * Dumb component displays each list item
  */
-const ProfileListingItem = ({ name, blurb, description, city, rate, photo }: Props) => {
+const ProfileListingItem = ({ name, blurb, description, address, rate, photo }: Props) => {
   const classes = useStyles();
+  const [city, setCity] = useState('');
+
+  useEffect(() => {
+    const addressPieces = address.split(',');
+    setCity(addressPieces[addressPieces.length - 2]);
+  }, [address, city]);
 
   return (
     <Grid item xs={12} sm={6} md={4} key={name} marginBottom={5}>

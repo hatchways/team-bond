@@ -1,10 +1,11 @@
-import { Button, styled } from '@mui/material';
+import { Button, Grid, styled } from '@mui/material';
 import { AppRoles } from '.';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Login from '../pages/Login/Login';
 import ProfileDetail from '../pages/Profile/ProfileDetail.tsx/ProfileDetail';
 import Settings from '../pages/Settings/Settings';
 import SignUp from '../pages/SignUp/SignUp';
+import LandingPage from '../pages/LandingPage/LandingPage';
 /**
  * Route Rules used to
  * 1. Hold Metadata for which roles see what
@@ -58,7 +59,7 @@ export class MenuResolver {
       authenticated: true,
     },
     {
-      label: 'Become a sitter',
+      label: 'Become a Sitter',
       path: '/signup?accountType=pet_sitter',
       canView: [],
       authenticated: false,
@@ -113,7 +114,15 @@ export class MenuResolver {
       label: 'Nav Bar Button Login',
       page: Login,
       component: (
-        <NavbarButton variant="outlined" size="large" fullWidth>
+        <NavbarButton
+          variant="outlined"
+          size="large"
+          fullWidth
+          sx={{
+            color: loginTextColor(window.location.href),
+            borderColor: loginTextColor(window.location.href),
+          }}
+        >
           Login
         </NavbarButton>
       ),
@@ -155,4 +164,11 @@ export class MenuResolver {
   public static getAuthMenuRules(): IMenuItemRule[] {
     return this.authMenuRules;
   }
+}
+
+function loginTextColor(thisUrl: string) {
+  if (thisUrl.indexOf('landingpage') > -1) {
+    return '#FFFFFF';
+  }
+  return '#f14140';
 }

@@ -9,12 +9,13 @@ interface Props {
   description: string;
   city: string;
   rate: number;
+  photo?: string;
 }
 
 /**
  * Dumb component displays each list item
  */
-const ProfileListingItem = ({ name, blurb, description, city, rate }: Props) => {
+const ProfileListingItem = ({ name, blurb, description, city, rate, photo }: Props) => {
   const classes = useStyles();
 
   return (
@@ -22,7 +23,7 @@ const ProfileListingItem = ({ name, blurb, description, city, rate }: Props) => 
       <Card raised={true} className={classes.profileCard}>
         <CardActionArea sx={{ paddingRight: '10px', paddingLeft: '10px' }}>
           <Box className={classes.cardHeader}>
-            <Avatar src="" className={classes.avatar} />
+            <Avatar src={photo} className={classes.avatar} />
             <Typography variant="subtitle2">{`${name}`}</Typography>
             <Typography variant="body2">{blurb}</Typography>
           </Box>

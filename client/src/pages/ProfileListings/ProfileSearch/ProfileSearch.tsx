@@ -1,48 +1,45 @@
-import { Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, InputLabel, Typography } from '@mui/material';
 import useStyles from './useStyles';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
 
 import { useState } from 'react';
+import { MobileDateTimePicker } from '@mui/lab';
 
 interface Props {
-  onChildFilterChange: ({ date, city }: { date: Date; city: string }) => void;
+  onChildFilterChange: ({ from, to }: { from: Date; to: Date }) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const ProfileSearch = ({ onChildFilterChange = () => {} }: Props): JSX.Element => {
   const classes = useStyles();
 
-  const now = new Date();
   const [filters, setFilters] = useState({
-    date: now,
-    city: '',
+    from: new Date(),
+    to: new Date(),
   });
 
   /**
    * calls parent function
-   * @param date date
-   * @param city city
+   * @param from datetime
+   * @param to datetime
    */
-  const handleFilterChange = (date: Date, city: string) => {
-    onChildFilterChange({ date, city });
+  const handleSearch = () => {
+    onChildFilterChange({ ...filters });
   };
 
-  const handleDateChange = (dateFilter: any) => {
+  const handleFromChange = (from: any) => {
     setFilters({
       ...filters,
-      date: dateFilter,
+      from: from,
     });
-    handleFilterChange(filters.date, filters.city);
   };
 
-  const handleCitySearch = (event: any) => {
+  const handleToChange = (to: any) => {
     setFilters({
       ...filters,
-      city: event.target.value,
+      to,
     });
-    handleFilterChange(filters.date, filters.city);
   };
 
   return (
@@ -55,29 +52,82 @@ const ProfileSearch = ({ onChildFilterChange = () => {} }: Props): JSX.Element =
         </Grid>
       </Grid>
       <Box maxWidth={675} margin="auto" className={classes.boxContainer}>
-        <Grid container marginTop={4} direction="row" justifyContent="space-between">
-          <Grid item xs={12} sm={8}>
-            <TextField
-              variant="outlined"
-              name="city"
-              color="secondary"
-              label="Search By city"
-              fullWidth
-              onChange={handleCitySearch}
-            ></TextField>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                // name="date"
-                value={filters.date}
-                onChange={handleDateChange}
-                renderInput={(params) => <TextField {...params} />}
+        <Grid container width="100%" marginTop={4} direction="row" justifyContent="space-around" alignContent="center">
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Grid item xs={12} sm={5}>
+              <MobileDateTimePicker
+                value={filters.from}
+                onChange={handleFromChange}
+                renderInput={({ inputRef, inputProps, InputProps }) => (
+                  <>
+                    <InputLabel
+                      sx={{
+                        fontSize: 16,
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        color: '#000',
+                      }}
+                      shrink
+                      htmlFor="from"
+                    >
+                      From
+                    </InputLabel>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                      <input className={classes.dateInput} id="from" ref={inputRef} {...inputProps} />
+                      {InputProps?.endAdornment}
+                    </Box>
+                  </>
+                )}
               />
-            </LocalizationProvider>
-          </Grid>
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <MobileDateTimePicker
+                label="To"
+                value={filters.to}
+                onChange={handleToChange}
+                renderInput={({ inputRef, inputProps, InputProps }) => (
+                  <>
+                    <InputLabel
+                      sx={{
+                        fontSize: 16,
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        color: '#000',
+                      }}
+                      shrink
+                      htmlFor="to"
+                    >
+                      To
+                    </InputLabel>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                      <input className={classes.dateInput} id="to" ref={inputRef} {...inputProps} />
+                      {InputProps?.endAdornment}
+                    </Box>
+                  </>
+                )}
+              />
+            </Grid>
+          </LocalizationProvider>
         </Grid>
       </Box>
+      <Grid container direction="row" justifyContent="space-around">
+        <Grid item xs={12} sm={5}>
+          <Box textAlign="center" marginTop={5}>
+            <Button
+              sx={{
+                padding: '20px 50px',
+              }}
+              onClick={handleSearch}
+              size="large"
+              variant="contained"
+              color="primary"
+              disableElevation
+            >
+              Search
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

@@ -51,7 +51,7 @@ const sitterSchema = Profile.discriminator(
   new mongoose.Schema({
     stripeConnectId: {
       type: String,
-      required: true,
+      required: false,
     },
     availabilityId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -59,7 +59,7 @@ const sitterSchema = Profile.discriminator(
     },
     activeScheduleId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: false,
     },
     requests: {
       type: [mongoose.Schema.Types.ObjectId],

@@ -5,6 +5,7 @@ import Login from '../pages/Login/Login';
 import ProfileDetail from '../pages/Profile/ProfileDetail.tsx/ProfileDetail';
 import Settings from '../pages/Settings/Settings';
 import SignUp from '../pages/SignUp/SignUp';
+import MessageBoard from '../pages/Message/MessageBoard';
 
 /**
  * Route Rules used to
@@ -86,7 +87,7 @@ export class MenuResolver {
     },
     {
       label: 'Messages',
-      page: Dashboard, // dashboard until integrated
+      page: MessageBoard, // dashboard until integrated
       path: '/messages',
       canView: [AppRoles.PET_SITTER, AppRoles.PET_OWNER],
       authenticated: true,

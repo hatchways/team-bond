@@ -1,5 +1,4 @@
 const stripe = require('stripe')(process.env.STRIPE_SECERT);
-const Profile = require('../models/Profile');
 const User = require('../models/User');
 const CURRENCY = 'usd';
 

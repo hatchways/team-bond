@@ -19,6 +19,6 @@
    "react/prop-types": "off",
    "react-hooks/rules-of-hooks": "error",
    "react-hooks/exhaustive-deps": "error",
-   "prettier/prettier": ["off", { "singleQuote": true }]
+   "prettier/prettier": ["error", {"endOfLine": "auto"}]
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
@@ -34,7 +34,7 @@ const MenuItem: React.FC<{ path: string; component?: JSX.Element; label?: string
   const classes = useStyles();
 
   return (
-    <Grid key={key} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
+    <Grid key={path} sx={{ textAlign: 'center', zIndex: 2 }} xs={2} justifySelf="flex-end" item>
       <NavLink className={classes.navbarItem} to={path}>
         {component && component} {label && label}
       </NavLink>

@@ -117,3 +117,4 @@ exports.createAvailability = asyncHandler(async (req, res, next) => {
 
   const availability = await Availability.create({ ...req.body, sitterId: loggedInUser });
   res.status(201).json({ success: { availability } });
+});

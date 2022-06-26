@@ -13,5 +13,10 @@ router.route('').post(protect, createAvailability);
 router.route('/:recordId').get(protect, getAvailability);
 router.route('/:recordId').put(protect, updateAvailability);
 router.route('/:recordId').delete(protect, deleteAvailability);
+const { getAvailableSitters, createAvailability } = require('../controllers/availability');
+router.route('').get(protect, getAvailableSitters);
+router.route('').post(protect, createAvailability);
+router.route('/:recordId').put(protect, updateAvailability);
+router.route('/:recordId').delete(protect, deleteAvailability);
 
 module.exports = router;

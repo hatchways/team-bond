@@ -1,5 +1,5 @@
 import { Avatar, Card, Container, Divider, Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageContainer from '../../../components/PageContainer/PageContainer';
 import { demoProfiles, demoReviews, IDemoProfile, IDemoReview } from '../temp/demo_data';
@@ -35,7 +35,7 @@ const ProfileDetail = (): JSX.Element => {
               elevation={1}
             >
               <Grid container spacing={2}>
-                <Grid container direction="row" justifyContent="flex-start" alignItems="center" xs={12}>
+                <Grid container direction="row" justifyContent="flex-start" alignItems="center">
                   <Grid item xs={2}>
                     <Avatar alt="Example Alt" src="/favicon.ico" sx={{ width: 50, height: 50 }} />
                   </Grid>

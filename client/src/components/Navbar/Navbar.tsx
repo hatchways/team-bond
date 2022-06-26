@@ -25,7 +25,12 @@ const menuItems: IMenuItemRule[] = [
   ...MenuResolver.getAuthMenuRules(),
 ];
 
-const MenuItem: React.FC<{ path: string; component?: JSX.Element; label?: string }> = ({ path, component, label }) => {
+const MenuItem: React.FC<{ path: string; component?: JSX.Element; label?: string; key: string }> = ({
+  path,
+  component,
+  label,
+  key,
+}) => {
   const classes = useStyles();
 
   return (
@@ -63,9 +68,9 @@ const Navbar: React.FC = () => {
     // TODO: conditionally render based on profile type
     return menuItems.map((menu) => {
       if (menu.authenticated) {
-        return loggedInUser && <MenuItem key={menu.path} path={menu.path} label={menu.label} />;
+        return loggedInUser && <MenuItem key={menu.key} path={menu.path} label={menu.label} />;
       } else {
-        return !loggedInUser && <MenuItem key={menu.path} path={menu.path} component={menu.component} />;
+        return !loggedInUser && <MenuItem key={menu.key} path={menu.path} component={menu.component} />;
       }
     });
   };

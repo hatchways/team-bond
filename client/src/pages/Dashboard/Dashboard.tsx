@@ -12,7 +12,8 @@ export default function Dashboard(): JSX.Element {
 
   useEffect(() => {
     initSocket();
-  }, [initSocket]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loggedInUser === undefined) return <CircularProgress />;
   if (!loggedInUser) {

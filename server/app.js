@@ -9,12 +9,14 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const jwt = require("jsonwebtoken");
+const { seedData } = require("./seeds/demoSeed");
 
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const profileRouter = require('./routes/profile');
 const bookingRouter = require('./routes/booking');
 const availabilityRouter = require('./routes/availability');
+const scheduleRouter = require("./routes/schedule");
 
 const { json, urlencoded } = express;
 
@@ -29,7 +31,7 @@ const io = new Server(server, {
   },
 });
 
-require('./utils/socketServer')(io);
+// require('./utils/socketServer')(io);
 
 
 if (process.env.NODE_ENV === 'development') {
@@ -50,6 +52,7 @@ app.use('/users', userRouter);
 app.use('/profile', profileRouter);
 app.use('/booking', bookingRouter);
 app.use('/availability', availabilityRouter);
+app.use('/availabiltiy/schedule', scheduleRouter);
 
 
 if (process.env.NODE_ENV === 'production') {
@@ -73,5 +76,7 @@ process.on('unhandledRejection', (err, promise) => {
   // Close server & exit process
   server.close(() => process.exit(1));
 });
+
+seedData();
 
 module.exports = { app, server };

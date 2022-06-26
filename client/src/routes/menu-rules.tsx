@@ -3,6 +3,7 @@ import { AppRoles } from '.';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Login from '../pages/Login/Login';
 import ProfileDetail from '../pages/Profile/ProfileDetail.tsx/ProfileDetail';
+import ProfileListings from '../pages/ProfileListings/ProfileListings';
 import Settings from '../pages/Settings/Settings';
 import SignUp from '../pages/SignUp/SignUp';
 import LandingPage from '../pages/LandingPage/LandingPage';
@@ -12,6 +13,10 @@ import LandingPage from '../pages/LandingPage/LandingPage';
  * 2. Used to match a path with a page, optionally, render a component
  */
 export interface IMenuItemRule {
+  /**
+   * unique key
+   */
+  key: string;
   /**
    * route label
    */
@@ -52,6 +57,7 @@ const NavbarButton = styled(Button)({
 export class MenuResolver {
   private static readonly rootPagesMenuRules: IMenuItemRule[] = [
     {
+      key: 'become-sitter-to-dashboard',
       label: 'Become a Sitter',
       path: '/dashboard',
       page: Dashboard,
@@ -59,18 +65,29 @@ export class MenuResolver {
       authenticated: true,
     },
     {
-      label: 'Become a Sitter',
+      key: 'become-sitter-signup',
+      label: 'Become a sitter',
       path: '/signup?accountType=pet_sitter',
       canView: [],
       authenticated: false,
     },
     {
+      key: 'dashboard',
       label: 'Dashboard',
       path: '/dashboard',
       canView: [AppRoles.PET_OWNER],
-      authenticated: false,
+      authenticated: true,
     },
     {
+      key: 'listings',
+      label: 'Listings',
+      path: '/listings',
+      page: ProfileListings,
+      canView: [AppRoles.PET_OWNER],
+      authenticated: true,
+    },
+    {
+      key: 'my-jobs',
       label: 'My Jobs',
       path: '/my-jobs',
       page: Dashboard, // dashboard until integrated
@@ -78,6 +95,7 @@ export class MenuResolver {
       authenticated: true,
     },
     {
+      key: 'my-sitters',
       label: 'My Sitters',
       page: Dashboard, // dashboard until integrated
       path: '/sitters',
@@ -85,6 +103,7 @@ export class MenuResolver {
       authenticated: true,
     },
     {
+      key: 'messages',
       label: 'Messages',
       page: Dashboard, // dashboard until integrated
       path: '/messages',
@@ -92,6 +111,7 @@ export class MenuResolver {
       authenticated: true,
     },
     {
+      key: 'settings',
       label: 'Settings',
       page: Settings,
       hide: true,
@@ -100,6 +120,7 @@ export class MenuResolver {
       authenticated: true,
     },
     {
+      key: 'profile-details',
       label: '',
       hide: true,
       page: ProfileDetail,
@@ -111,8 +132,10 @@ export class MenuResolver {
 
   private static readonly authMenuRules: IMenuItemRule[] = [
     {
+      key: 'nav-bar-button-login',
       label: 'Nav Bar Button Login',
       page: Login,
+      hide: false,
       component: (
         <NavbarButton
           variant="outlined"
@@ -131,8 +154,10 @@ export class MenuResolver {
       authenticated: false,
     },
     {
+      key: 'nav-bar-button-signup',
       label: 'Nav Bar Button Sign Up',
       page: SignUp,
+      hide: false,
       component: (
         <NavbarButton variant="contained" size="large" fullWidth disableElevation>
           Sign up
